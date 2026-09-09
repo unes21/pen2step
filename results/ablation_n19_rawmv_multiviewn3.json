@@ -1,0 +1,388 @@
+{
+  "offset": 0,
+  "n": 19,
+  "results": {
+    "raw_mv": {
+      "n": 19,
+      "step_validity_rate": 0.3684210526315789,
+      "chamfer_mm": 44.24183205443247,
+      "chamfer_norm": 0.39050561614037343,
+      "dim_error": 0.9961516781697581,
+      "volume_error": 0.9999999250654168,
+      "fscore": 0.0
+    },
+    "multiview_n3": {
+      "n": 19,
+      "step_validity_rate": 1.0,
+      "chamfer_mm": 26.401361036822504,
+      "chamfer_norm": 0.2424920175489463,
+      "dim_error": 0.5260218764022236,
+      "volume_error": 1.2767820786771438,
+      "fscore": 0.0952535676366297
+    }
+  },
+  "raw": {
+    "raw_mv": [
+      {
+        "step_valid": false,
+        "family": "stepped_block",
+        "id": "real_01",
+        "has_dims": true
+      },
+      {
+        "step_valid": false,
+        "family": "bracket_hole",
+        "id": "real_02",
+        "has_dims": true
+      },
+      {
+        "step_valid": false,
+        "family": "u_channel",
+        "id": "real_03",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 55.76768472569627,
+        "chamfer_norm": 0.39433707945972374,
+        "dim_error": 0.9985900924212591,
+        "volume_error": 0.9999999989248048,
+        "fscore": 0.0,
+        "family": "t_block",
+        "id": "real_04",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "staircase",
+        "id": "real_05",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 77.64342897655695,
+        "chamfer_norm": 0.5708458415112369,
+        "dim_error": 0.9941992323508525,
+        "volume_error": 0.9999999955319174,
+        "fscore": 0.0,
+        "family": "chamfer_block",
+        "id": "real_06",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "stepped_block",
+        "id": "real_07",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "rounded_plate",
+        "id": "real_08",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "square_tube",
+        "id": "real_09",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 35.732824140087295,
+        "chamfer_norm": 0.32891351908960664,
+        "dim_error": 0.9993440252313518,
+        "volume_error": 0.9999999997494798,
+        "fscore": 0.0,
+        "family": "tube",
+        "id": "real_10",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 34.58061288952714,
+        "chamfer_norm": 0.3009537105862556,
+        "dim_error": 0.9969565146516027,
+        "volume_error": 0.9999999772119489,
+        "fscore": 0.0,
+        "family": "stepped_shaft",
+        "id": "real_11",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 41.10780037821897,
+        "chamfer_norm": 0.36629667122277026,
+        "dim_error": 0.9957152563004397,
+        "volume_error": 0.9999998905550543,
+        "fscore": 0.0,
+        "family": "cap_screw",
+        "id": "real_12",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "washer",
+        "id": "real_13",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 43.032298343301925,
+        "chamfer_norm": 0.3699111716686339,
+        "dim_error": 0.9941737501958792,
+        "volume_error": 0.9999999690982925,
+        "fscore": 0.0,
+        "family": "keyed_cylinder",
+        "id": "real_14",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "flanged_bushing",
+        "id": "real_15",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "rod",
+        "id": "real_16",
+        "has_dims": false
+      },
+      {
+        "step_valid": false,
+        "family": "cone_hole",
+        "id": "real_17",
+        "has_dims": true
+      },
+      {
+        "step_valid": false,
+        "family": "washer",
+        "id": "real_18",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 21.828174927638763,
+        "chamfer_norm": 0.4022813194443868,
+        "dim_error": 0.9940828760369215,
+        "volume_error": 0.9999996443864201,
+        "fscore": 0.0,
+        "family": "hex_bolt",
+        "id": "real_19",
+        "has_dims": true
+      }
+    ],
+    "multiview_n3": [
+      {
+        "step_valid": true,
+        "chamfer_mm": 17.594659537003984,
+        "chamfer_norm": 0.16478908429929806,
+        "dim_error": 0.5075757556701951,
+        "volume_error": 0.8819103958243155,
+        "fscore": 0.24886383601756953,
+        "family": "stepped_block",
+        "id": "real_01",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 24.590675008335428,
+        "chamfer_norm": 0.2802333552459016,
+        "dim_error": 0.6013624132789385,
+        "volume_error": 0.7007237410365849,
+        "fscore": 0.005488888888888889,
+        "family": "bracket_hole",
+        "id": "real_02",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 28.644908556846637,
+        "chamfer_norm": 0.1995785343641577,
+        "dim_error": 0.17153996053887133,
+        "volume_error": 0.10618651892897114,
+        "fscore": 0.06692129629629628,
+        "family": "u_channel",
+        "id": "real_03",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 33.18079834647375,
+        "chamfer_norm": 0.23462367459665284,
+        "dim_error": 0.45312776752097306,
+        "volume_error": 0.9372555403782407,
+        "fscore": 0.0783175505050505,
+        "family": "t_block",
+        "id": "real_04",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 41.23061982680132,
+        "chamfer_norm": 0.2612884359173438,
+        "dim_error": 0.43204018090170737,
+        "volume_error": 0.9696133439615093,
+        "fscore": 0.04544107744107744,
+        "family": "staircase",
+        "id": "real_05",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 40.36246912743369,
+        "chamfer_norm": 0.29675077412510914,
+        "dim_error": 0.34387666583722587,
+        "volume_error": 0.9925615948231306,
+        "fscore": 0.021910130718954247,
+        "family": "chamfer_block",
+        "id": "real_06",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 29.392973987058966,
+        "chamfer_norm": 0.22411932496916798,
+        "dim_error": 0.36050997692651293,
+        "volume_error": 0.9886103715024245,
+        "fscore": 0.03335697399527187,
+        "family": "stepped_block",
+        "id": "real_07",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 9.994979638595279,
+        "chamfer_norm": 0.07049027794773204,
+        "dim_error": 0.3758683145854615,
+        "volume_error": 0.9171305252101232,
+        "fscore": 0.05298202247191011,
+        "family": "rounded_plate",
+        "id": "real_08",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 36.704318232187774,
+        "chamfer_norm": 0.2798678009930749,
+        "dim_error": 0.3636363648822099,
+        "volume_error": 0.9864028857510453,
+        "fscore": 0.0415746013667426,
+        "family": "square_tube",
+        "id": "real_09",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 8.826319240274506,
+        "chamfer_norm": 0.08124450814594637,
+        "dim_error": 0.4002563073103487,
+        "volume_error": 0.8085354068067265,
+        "fscore": 0.2864942611190818,
+        "family": "tube",
+        "id": "real_10",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 12.676320360460855,
+        "chamfer_norm": 0.11032151631459884,
+        "dim_error": 0.5394266083548683,
+        "volume_error": 0.05652168516537207,
+        "fscore": 0.22732490379329304,
+        "family": "stepped_shaft",
+        "id": "real_11",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 40.39633441281391,
+        "chamfer_norm": 0.3599570565409238,
+        "dim_error": 0.4327644568285495,
+        "volume_error": 0.7405749435750666,
+        "fscore": 0.052216804979253115,
+        "family": "cap_screw",
+        "id": "real_12",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 16.977877890714474,
+        "chamfer_norm": 0.14502284208041405,
+        "dim_error": 0.4768489552876845,
+        "volume_error": 0.9522022313585046,
+        "fscore": 0.10571511627906977,
+        "family": "washer",
+        "id": "real_13",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 31.817604492992473,
+        "chamfer_norm": 0.27350822082046694,
+        "dim_error": 0.616224994804742,
+        "volume_error": 0.8450204682453116,
+        "fscore": 0.09201243455497382,
+        "family": "keyed_cylinder",
+        "id": "real_14",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 21.707250030645696,
+        "chamfer_norm": 0.15988895318934704,
+        "dim_error": 0.47609452320353934,
+        "volume_error": 0.7775650538821612,
+        "fscore": 0.1596961426491994,
+        "family": "flanged_bushing",
+        "id": "real_15",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 24.837842480816718,
+        "chamfer_norm": 0.20276862120671307,
+        "dim_error": 0.34706686817068483,
+        "volume_error": 1.9551942790383767,
+        "fscore": 0.19123733162283515,
+        "family": "rod",
+        "id": "real_16",
+        "has_dims": false
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 47.09593104721476,
+        "chamfer_norm": 0.6230577411870228,
+        "dim_error": 1.153568187006557,
+        "volume_error": 0.9103921629963865,
+        "fscore": 0.0,
+        "family": "cone_hole",
+        "id": "real_17",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 18.910363187948846,
+        "chamfer_norm": 0.33236772937520476,
+        "dim_error": 1.3197925408758489,
+        "volume_error": 6.249959590243923,
+        "fscore": 0.046503456221198156,
+        "family": "washer",
+        "id": "real_18",
+        "has_dims": true
+      },
+      {
+        "step_valid": true,
+        "chamfer_mm": 16.68361429500853,
+        "chamfer_norm": 0.30746988211090326,
+        "dim_error": 0.6228348096573308,
+        "volume_error": 3.4824987561375607,
+        "fscore": 0.0537609561752988,
+        "family": "hex_bolt",
+        "id": "real_19",
+        "has_dims": true
+      }
+    ]
+  }
+}

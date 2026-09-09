@@ -1,0 +1,18 @@
+{
+  "n": 6,
+  "seed": 1,
+  "hand_drawn": true,
+  "image_size": 512,
+  "ratios": {
+    "train": 0.8,
+    "val": 0.1,
+    "test": 0.1
+  },
+  "families": {
+    "plate_hole": 1,
+    "stepped_shaft": 2,
+    "bolt_plate": 1,
+    "l_bracket": 1,
+    "filleted_block": 1
+  }
+}

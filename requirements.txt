@@ -1,0 +1,28 @@
+# Install PyTorch first, matched to your CUDA version, e.g.:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+
+# Frozen backbone
+transformers>=4.39.0
+accelerate>=0.27.0
+bitsandbytes>=0.43.0      # 4-bit demo path only; the ablation runs in bfloat16
+
+# CAD kernel and geometry
+cadquery>=2.4.0
+numpy>=1.24.0
+scipy>=1.11.0             # Chamfer distance (cKDTree) and elastic deformation
+
+# Dimension reading
+easyocr>=1.7.0            # pulls in opencv; ~64 MB model downloaded on first call
+
+# Sketch rendering
+svglib>=1.5.1             # SVG -> raster without cairo (Windows friendly)
+reportlab>=4.0.0
+pillow>=10.0.0
+
+# Figures
+matplotlib>=3.7.0
+
+# Interactive demo
+gradio>=4.20.0
+
+# No training dependencies: peft / datasets are deliberately absent.

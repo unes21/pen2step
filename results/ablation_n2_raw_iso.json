@@ -1,0 +1,15 @@
+{
+  "offset": 0,
+  "n": 2,
+  "results": {
+    "raw_iso": {
+      "n": 2,
+      "step_validity_rate": 1.0,
+      "chamfer_mm": 50.63587862484266,
+      "chamfer_norm": 0.4977235314362157,
+      "dim_error": 0.9708791171220384,
+      "volume_error": 0.9999811552826843,
+      "fscore": 0.0
+    }
+  }
+}

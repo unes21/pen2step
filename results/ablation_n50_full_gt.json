@@ -1,0 +1,15 @@
+{
+  "offset": 0,
+  "n": 50,
+  "results": {
+    "full_gt": {
+      "n": 50,
+      "step_validity_rate": 0.78,
+      "chamfer_mm": 47.15705798923375,
+      "chamfer_norm": 0.282662170936578,
+      "dim_error": 0.43949359886348904,
+      "volume_error": 0.8937116161255724,
+      "fscore": 0.06690373601025379
+    }
+  }
+}

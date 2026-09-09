@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use Pen2STEP or Pen2STEP-Bench, please cite the following."
+title: "Pen2STEP: Training-Free Conversion of Hand-Drawn Engineering Sketches to Parametric CAD Models using a Frozen Vision-Language Model"
+abstract: >-
+  Pen2STEP is a training-free pipeline that converts a photograph of a hand-drawn
+  multi-view engineering sheet into an editable parametric CAD model exported to STEP,
+  by wrapping a frozen open-weight vision-language model in a deterministic engineering
+  shell. The repository also contains Pen2STEP-Bench, a dimension-annotated benchmark
+  with 19 hand-drawn sheets and verified ground-truth solids.
+type: software
+license: MIT
+authors:
+  - family-names: Baytin
+    given-names: Cem
+    orcid: "https://orcid.org/0009-0006-6994-9734"
+    affiliation: "Istanbul Technical University"
+  - family-names: Goker Unes
+    given-names: Ayberk
+    orcid: "https://orcid.org/0009-0000-3407-4778"
+    affiliation: "University of California, Berkeley"
+  - family-names: Aslan
+    given-names: Selman
+    orcid: "https://orcid.org/0000-0002-6766-7315"
+    affiliation: "Mus Alparslan University"
+  - family-names: Kadioglu
+    given-names: Fethi
+    orcid: "https://orcid.org/0000-0001-7049-1704"
+    affiliation: "Istanbul Technical University"
+  - family-names: Tokdemir
+    given-names: Onur Behzat
+    orcid: "https://orcid.org/0000-0002-4101-8560"
+    affiliation: "Istanbul Technical University"
+keywords:
+  - design automation
+  - sketch-to-CAD
+  - training-free inference
+  - vision-language models
+  - program synthesis
+  - CadQuery

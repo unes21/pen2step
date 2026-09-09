@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+*.egg-info/
+
+# Regenerated synthetic images (see README: generate with --seed 0).
+# The manifests that describe them ARE tracked, under benchmark/synthetic/.
+data/
+data_smoke/
+data_*/
+
+# Evaluation output is written to <data-dir>/results by src/run_baselines.py
+benchmark/**/results/
+
+# Pipeline output
+outputs/
+*.step
+*.stp
+*.stl
+
+# Manuscript build output (regenerate with paper/build_docx.py)
+paper/Pen2STEP.docx
+paper/*.pdf
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out
+
+# Gradio
+.gradio/
+flagged/
+
+# Archives and OS noise
+*.zip
+# ...but the Colab/Drive export archives are the primary record of the results
+!results/colab_drive_exports/*.zip
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Model weights are fetched from Hugging Face at runtime
+*.safetensors
+*.bin

@@ -1,0 +1,42 @@
+{
+  "offset": 0,
+  "n": 50,
+  "results": {
+    "raw_iso": {
+      "n": 50,
+      "step_validity_rate": 0.26,
+      "chamfer_mm": 73.5816485562447,
+      "chamfer_norm": 0.45100868442827585,
+      "dim_error": 0.9917446062983081,
+      "volume_error": 0.999997949652308,
+      "fscore": 0.00012490632025980515
+    },
+    "repair_iso": {
+      "n": 50,
+      "step_validity_rate": 0.52,
+      "chamfer_mm": 37.94337201264864,
+      "chamfer_norm": 0.23313801085825436,
+      "dim_error": 0.42984627047419016,
+      "volume_error": 1.3586313464514184,
+      "fscore": 0.08258148622207716
+    },
+    "multiview": {
+      "n": 50,
+      "step_validity_rate": 0.54,
+      "chamfer_mm": 49.96728399888307,
+      "chamfer_norm": 0.30309774020848307,
+      "dim_error": 0.6197607847128631,
+      "volume_error": 0.9681848490539307,
+      "fscore": 0.0401933934041187
+    },
+    "full_ocr": {
+      "n": 50,
+      "step_validity_rate": 0.88,
+      "chamfer_mm": 49.83772462027282,
+      "chamfer_norm": 0.29976375151032586,
+      "dim_error": 0.43259394148597174,
+      "volume_error": 0.8678230242277974,
+      "fscore": 0.06112486391672615
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "n": 3000,
+  "seed": 0,
+  "hand_drawn": true,
+  "image_size": 512,
+  "ratios": {
+    "train": 0.8,
+    "val": 0.1,
+    "test": 0.1
+  },
+  "families": {
+    "bolt_plate": 292,
+    "box": 295,
+    "tube": 293,
+    "chamfered_block": 327,
+    "l_bracket": 291,
+    "slotted_plate": 303,
+    "filleted_block": 292,
+    "plate_hole": 318,
+    "stepped_shaft": 288,
+    "cylinder": 301
+  }
+}
