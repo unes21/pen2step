@@ -12,7 +12,7 @@ INSTRUCTION = (
     "Write SHORT CadQuery Python code using simple primitives: "
     "cq.Workplane('XY').box(), .cylinder(), .extrude(), .union(), .cut(). "
     "Estimate reasonable round integer dimensions in millimeters. "
-    "Output ONLY Python code — no markdown, no backticks, no explanation. "
+    "Output ONLY Python code - no markdown, no backticks, no explanation. "
     "Keep the code under 30 lines. "
     "Store the final shape in a variable called 'result'. "
     "Example for a box: result = cq.Workplane('XY').box(100, 50, 30)"

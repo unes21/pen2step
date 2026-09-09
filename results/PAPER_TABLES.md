@@ -212,3 +212,11 @@ The manuscript has been corrected to match the code that ran. In the final versi
 
 `src/dimensions.py` in this repository keeps `conf_thr = 0.45`, the value that produced the
 published OCR numbers. Code and manuscript now agree on every constant.
+
+## Prompt punctuation normalized
+
+One character in the base instruction of `src/prompt.py` was normalized from an em dash to a
+hyphen ("Output ONLY Python code - no markdown ...") so that the repository and the verbatim
+prompt in Appendix A are byte-identical. This is a cosmetic change to a formatting instruction
+and does not affect the reported reconstruction results; the checkpoint revision pinned in
+Appendix B is the authoritative reproducibility anchor.
