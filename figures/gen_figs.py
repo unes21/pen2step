@@ -9,7 +9,9 @@ import os
 # Figures are written next to this script (the repository figures/ folder).
 OUT = os.path.dirname(os.path.abspath(__file__))
 
-# ---------------------------------------------------------------- Figure 1
+# ---------------------------------------------------------------- pipeline schematic
+# Simplified schematic of the shell (fig_pipeline.png). Figure 1 of the paper is the
+# detailed diagram figures/fig_pipeline_v2.png, which this script does not generate.
 fig, ax = plt.subplots(figsize=(9.2, 3.1))
 ax.set_xlim(0, 16)
 ax.set_ylim(0, 5)
@@ -22,8 +24,8 @@ centers = {
 }
 labels = {
     "I": "Multi-view\nsketches", "C": "Multi-view\ncomposition",
-    "O": "Dimension\nOCR + inject", "V": "Frozen VLM\n(N candidates)",
-    "R": "AST\nrepair", "E": "Execute\n& select",
+    "O": "Dimension\nOCR + inject", "V": "Backbone VLM\n(N candidates)",
+    "R": "AST repair +\nruntime guards", "E": "Execute (60 s)\n& select",
     "S": "Scale\nrecovery", "Out": "STEP /\nB-rep solid",
 }
 io_nodes = {"I", "Out"}

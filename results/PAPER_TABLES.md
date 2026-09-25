@@ -137,6 +137,7 @@ five spurious tokens (2 or 4 mm) accepted by the naive reader on four undimensio
 
 | Figure | File | Script |
 |---|---|---|
+| 1 | `figures/fig_pipeline_v2.png` | prepared manually, not script-generated; `figures/gen_figs.py` produces only the simplified schematic `fig_pipeline.png` |
 | 5 | `figures/prediction_gallery_replay.png` | `tools/make_gallery.py --condition multiview_n3 --seed 0` |
 | 6 | `figures/fig_validity_fidelity_replay.png` | `tools/make_fig_validity_fidelity.py` |
 | Graphical abstract | `figures/graphical_abstract.png` | `tools/make_graphical_abstract.py` |
