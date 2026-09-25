@@ -97,6 +97,51 @@ def _center(pts: np.ndarray) -> np.ndarray:
     return pts - pts.mean(axis=0, keepdims=True)
 
 
+# Küpün 24 uygun (determinant=+1, yansımasız) dönme rotasyonu — eksen
+# permütasyonları + işaret kombinasyonları. Hakem yanıtı (A3): metrikler
+# poza duyarlı; tahmin edilen katının GT'ye göre hangi eksene "baktığı"
+# bilinmiyor (mean-centering konumu düzeltir ama yönelimi düzeltmez).
+def _cube_rotations() -> list[np.ndarray]:
+    from itertools import permutations, product
+    mats = []
+    for perm in permutations(range(3)):
+        P = np.zeros((3, 3))
+        for i, p in enumerate(perm):
+            P[i, p] = 1.0
+        for signs in product([1, -1], repeat=3):
+            R = P * np.array(signs)[:, None]
+            if abs(np.linalg.det(R) - 1.0) < 1e-6:  # sadece uygun rotasyonlar (yansıma yok)
+                mats.append(R)
+    assert len(mats) == 24, f"beklenen 24 rotasyon, bulunan {len(mats)}"
+    return mats
+
+
+_CUBE_ROTATIONS = _cube_rotations()
+
+
+def align_best_of_24(pred_pts: np.ndarray, gt_pts: np.ndarray):
+    """Tahmin nokta bulutunu, 24 eksen-hizalı rotasyon içinden GT'ye en yakın
+    olanıyla döndürür (best-of-24 poz hizalama, A3).
+
+    İki nokta kümesi de zaten merkezlenmiş (mean-centered) olmalı. Chamfer
+    mesafesini en aza indiren rotasyonu seçer; döndürülmüş tahmin noktalarını
+    ve seçilen rotasyon matrisini döndürür.
+
+    Not: bu, tam ICP (iteratif en-yakın-nokta) DEĞİL, ayrık bir arama — eksen
+    permütasyonu/işaret belirsizliğini (örn. bir kutunun hangi kenarının
+    "uzunluk" sayıldığı) düzeltir, ama serbest açılı yanlış hizalamayı düzeltmez.
+    """
+    best_R = np.eye(3)
+    best_d = chamfer_distance(pred_pts, gt_pts)
+    for R in _CUBE_ROTATIONS:
+        rotated = pred_pts @ R.T
+        d = chamfer_distance(rotated, gt_pts)
+        if d < best_d:
+            best_d = d
+            best_R = R
+    return pred_pts @ best_R.T, best_R, best_d
+
+
 # ── Metrikler ────────────────────────────────────────────────────────────────
 
 def chamfer_distance(p: np.ndarray, q: np.ndarray) -> float:
@@ -153,8 +198,18 @@ def fscore(p: np.ndarray, q: np.ndarray, tau: float) -> float:
 
 # ── Üst seviye değerlendirme ─────────────────────────────────────────────────
 
-def evaluate(pred_step: str, gt_step: str, n_points: int = 4000) -> dict:
-    """İki STEP dosyasını karşılaştır → metrik sözlüğü."""
+def evaluate(pred_step: str, gt_step: str, n_points: int = 4000,
+            align: bool = False) -> dict:
+    """İki STEP dosyasını karşılaştır → metrik sözlüğü.
+
+    align : True ise Chamfer/F-score, best-of-24 eksen-rotasyonu hizalamasından
+            SONRA hesaplanır (A3, hakem yanıtı). DimE ve VolE zaten
+            yönelimden bağımsızdır (sıralı bbox / hacim), bu yüzden
+            align=True/False ile değişmez — sadece Chamfer ve F etkilenir.
+            Geriye dönük uyumluluk için varsayılan False (makalenin ana
+            tabloları bu kuralla üretildi); align=True ile yeniden koşmak
+            §6 "Pose sensitivity" limitasyonunu doğrudan yanıtlar.
+    """
     out = {
         "step_valid": False,
         "chamfer_mm": None,
@@ -162,6 +217,7 @@ def evaluate(pred_step: str, gt_step: str, n_points: int = 4000) -> dict:
         "dim_error": None,
         "volume_error": None,
         "fscore": None,
+        "aligned": align,
     }
 
     pred = load_shape(pred_step)
@@ -178,6 +234,10 @@ def evaluate(pred_step: str, gt_step: str, n_points: int = 4000) -> dict:
         gp = sample_surface(gt, n_points, seed=2)
 
         cpp, cgp = _center(pp), _center(gp)
+
+        if align:
+            cpp, R, _ = align_best_of_24(cpp, cgp)
+            out["rotation_applied"] = not np.allclose(R, np.eye(3))
 
         # Ham (mm) Chamfer — merkezleyerek konum farkını ele (boyut korunur)
         ch_raw = chamfer_distance(cpp, cgp)

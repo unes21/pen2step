@@ -44,3 +44,29 @@ def build_prompt(dim_hint: str = "", multiview: bool = False) -> str:
     if dim_hint:
         instr += dim_hint
     return CHAT_TEMPLATE.format(instruction=instr)
+
+
+# ── Kısa/minimal talimat (hakem yanıtı, A7a) ─────────────────────────────────
+# CAD-Coder'ın (Doris et al., 2025) gerçek eğitim/çıkarım prompt'u kamuya açık
+# kaynaklarda (GitHub, HuggingFace model kartı, örnek Space) belgelenmemiş —
+# UYDURULMADI. Bunun yerine, "raw_mv'nin düşük geçerliliği kısmen bizim
+# 80-kelimelik özel talimatımızın modelin alışık olmadığı bir format istemesi
+# olabilir mi?" sorusunu test eden, dürüstçe etiketlenmiş KISA bir talimat.
+# Bu, CAD-Coder'ın kendi eğitim prompt'unun yeniden üretimi OLARAK SUNULMAZ.
+SHORT_INSTRUCTION = (
+    "Generate CadQuery Python code for this CAD shape. "
+    "Store the final shape in a variable called 'result'."
+)
+
+
+def build_short_prompt(multiview: bool = False) -> str:
+    """Kısa/minimal talimat varyantı (native-prompt ablasyonu, A7a).
+
+    Ana INSTRUCTION'dan farklı olarak: primitif listesi, uzunluk sınırı, ve
+    markdown yasağı yok — CAD-Coder'ın kendi kısa örnek kullanım stiline
+    (bkz. HF Space placeholder: "create a rectangular plate ...") daha yakın.
+    """
+    instr = SHORT_INSTRUCTION
+    if multiview:
+        instr += MULTIVIEW_CLAUSE
+    return CHAT_TEMPLATE.format(instruction=instr)

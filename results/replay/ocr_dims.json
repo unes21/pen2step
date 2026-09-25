@@ -1,0 +1,80 @@
+{
+  "real_01": [],
+  "real_01#naive": [
+    3.0,
+    5.0,
+    8.0
+  ],
+  "real_02": [],
+  "real_02#naive": [
+    1.0,
+    3.0,
+    5.0,
+    9.0
+  ],
+  "real_03": [
+    20.0,
+    30.0,
+    240.0
+  ],
+  "real_03#naive": [
+    20.0,
+    30.0,
+    240.0
+  ],
+  "real_04": [],
+  "real_04#naive": [],
+  "real_05": [],
+  "real_05#naive": [
+    2.0
+  ],
+  "real_06": [],
+  "real_06#naive": [
+    2.0,
+    4.0
+  ],
+  "real_07": [],
+  "real_07#naive": [],
+  "real_08": [],
+  "real_08#naive": [],
+  "real_09": [],
+  "real_09#naive": [
+    2.0
+  ],
+  "real_10": [],
+  "real_10#naive": [],
+  "real_11": [],
+  "real_11#naive": [],
+  "real_12": [],
+  "real_12#naive": [],
+  "real_13": [],
+  "real_13#naive": [],
+  "real_14": [],
+  "real_14#naive": [],
+  "real_15": [],
+  "real_15#naive": [
+    2.0
+  ],
+  "real_16": [],
+  "real_16#naive": [],
+  "real_17": [
+    5.0,
+    40.0
+  ],
+  "real_17#naive": [
+    5.0,
+    40.0
+  ],
+  "real_18": [],
+  "real_18#naive": [],
+  "real_19": [
+    2.0,
+    14.0,
+    24.0
+  ],
+  "real_19#naive": [
+    2.0,
+    14.0,
+    24.0
+  ]
+}

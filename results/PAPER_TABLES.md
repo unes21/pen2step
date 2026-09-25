@@ -1,222 +1,151 @@
 # Provenance of every number in the paper
 
-**Status: complete.** All 12 result rows in the manuscript are backed by a raw output file,
-and all 12 were verified programmatically — every one of the five metrics matches its file
-exactly at the precision printed in the paper (Chamfer to one decimal, the rest to three).
+Every table in the manuscript is traced here to a file in this repository. The synthetic
+split (Table 2) and the real hand-drawn split (Tables 3 and 4, Figures 5 and 6) were produced
+by two different protocols, described separately below.
 
-The tables in `paper/build_docx.py` (lines ~522–580) are hard-coded strings, not generated
-from these files. This map is the only record linking the two; keep it up to date.
-
-The ablations were run on Google Colab. Results were written to Google Drive
-(`MyDrive/VeriCAD/results/`) and downloaded as Drive export archives. Those archives are
-preserved verbatim under [`colab_drive_exports/`](colab_drive_exports/).
+Sampling temperature for every run in the paper: **T = 0.5** (top-p 0.9, repetition penalty
+1.1, at most 512 new tokens; candidate 0 greedy). The default in `src/framework.py`,
+`src/run_baselines.py`, `src/generation_dump.py` and `app.py` is 0.5.
 
 ---
 
 ## Table 2 — synthetic split (n = 50)
 
+Single unseeded run per condition, June 2026, Google Colab (A100, bfloat16). The runtime
+guards (arc fallback, partial-execution salvage, result discovery, base-plate removal) were
+active in every row, including `raw_iso`. Point sets are mean-centred, not pose-aligned;
+Chamfer, DimE, VolE and F are averaged over valid solids only.
+
 | Paper row | SVR | Cham. | DimE | VolE | F | Source |
 |---|---|---|---|---|---|---|
-| raw_iso | 0.260 | 73.6 | 0.992 | 1.000 | 0.000 | `ablation_n50_rawiso_repairiso_multiview_fullocr.json` ✅ |
-| repair_iso | 0.520 | 37.9 | 0.430 | 1.359 | 0.083 | same file ✅ |
-| multiview | 0.540 | 50.0 | 0.620 | 0.968 | 0.040 | same file ✅ |
-| full_ocr | 0.880 | 49.8 | 0.433 | 0.868 | 0.061 | same file ✅ |
-| full_gt | 0.780 | 47.2 | 0.439 | 0.894 | 0.067 | `ablation_n50_full_gt.json` ✅ |
+| raw_iso | 0.260 | 73.6 | 0.992 | 1.000 | 0.000 | `ablation_n50_rawiso_repairiso_multiview_fullocr.json` |
+| repair_iso | 0.520 | 37.9 | 0.430 | 1.359 | 0.083 | same file |
+| multiview (N=1) | 0.540 | 50.0 | 0.620 | 0.968 | 0.040 | same file |
+| multiview (N=3) | 0.980 | 49.3 | 0.614 | 0.944 | 0.062 | `ablation_n50_multiview_n3.json` |
+| full_ocr | 0.880 | 49.8 | 0.433 | 0.868 | 0.061 | `ablation_n50_rawiso_repairiso_multiview_fullocr.json` |
+| full_gt | 0.780 | 47.2 | 0.439 | 0.894 | 0.067 | `ablation_n50_full_gt.json` |
 
-Origin: `colab_drive_exports/20260608_synthetic_n50/` (Drive export of 8 June 2026).
+Origin: `colab_drive_exports/20260608_synthetic_n50/`.
+
+---
+
+## Real split: recorded generations and offline replay
+
+The shell never feeds an execution result back into generation, so the text of a candidate
+depends only on (sheet, prompt, candidate index, seed). The real-split numbers are therefore
+produced in two steps.
+
+1. **Generation (GPU, once).** `src/generation_dump.py` recorded 238 raw generations on
+   22 September 2026 (Google Colab, one A100, bfloat16, library versions as resolved by pip on
+   that date): seeds 0, 1, 2; candidates 0 to 2; prompt keys `mv` (no dimensions), `ocr`
+   (OCR with plausibility floor), `ocrn` (naive OCR, only where it differs) and `gt`
+   (annotated dimensions). Candidate 0 is greedy and recorded once. Every generation reached
+   the 512-token limit.
+   Output: [`replay/dump.jsonl`](replay/dump.jsonl), [`replay/ocr_dims.json`](replay/ocr_dims.json).
+2. **Replay and scoring (CPU).** `src/replay.py` executes the recorded text under each shell
+   configuration (CadQuery 2.7.0), selects, and scores against the original and the rescaled
+   ground truth. `src/stats.py` computes every statistic with one convention;
+   `src/trivial_replay.py` scores the two input-agnostic baselines.
+   Outputs: [`replay/replay_rows.json`](replay/replay_rows.json) (per part, seed, condition),
+   [`replay/stats.json`](replay/stats.json), [`replay/trivial.json`](replay/trivial.json).
+
+```bash
+python -m src.replay --dump results/replay/dump.jsonl
+python -m src.stats
+python -m src.trivial_replay
+python -m src.ocr_eval
+python tools/make_gallery.py --condition multiview_n3 --seed 0
+python tools/make_fig_validity_fidelity.py
+python tools/make_graphical_abstract.py
+```
+
+Statistical convention (real split): F-scores average all 19 parts with an invalid output
+scored as 0, per-part values averaged over seeds; 95% CIs from 10,000 bootstrap resamples over
+parts; exact Wilcoxon signed-rank for paired F (zero differences dropped, number of non-zero
+pairs reported); exact McNemar per seed for paired validity; Wilson interval on pooled SVR.
+Chamfer, DimE and VolE are averaged over valid solids only. "Aligned" = best of 24
+axis-aligned rotations (minimum Chamfer). "Scale-norm." = prediction rescaled to the
+ground-truth bounding-box diagonal before alignment. Measured F ceiling (ground truth against
+itself, resampled): 0.959, range 0.857 to 0.996.
 
 ## Table 3 — real hand-drawn split (n = 19)
 
-| Paper row | SVR | Cham. | DimE | VolE | F | Source |
-|---|---|---|---|---|---|---|
-| raw_mv (N=1) | 0.368 | 44.2 | 0.996 | 1.000 | 0.000 | `ablation_n19_rawmv_multiviewn3.json` ✅ |
-| multiview (N=1) | 0.789 | 26.8 | 0.559 | 1.434 | 0.107 | `ablation_n19_multiview_fullocr_fullgt.json` ✅ |
-| multiview (N=3) | 1.000 | 26.4 | 0.526 | 1.277 | 0.095 | `ablation_n19_rawmv_multiviewn3.json` ✅ |
-| full_ocr (N=3) | 0.895 | 24.9 | 0.512 | 0.885 | 0.103 | `ablation_n19_fullocr_withfloor.json` ✅ |
-| full_gt (N=3) | 0.947 | 24.0 | 0.422 | 0.904 | 0.119 | `ablation_n19_multiview_fullocr_fullgt.json` ✅ |
+`stats.json` key → `orig.conditions.<name>` (and `rescaled.conditions.<name>` for the
+rescaled-GT column); baselines from `trivial.json`.
 
-## Table 4 — OCR plausibility floor (n = 19)
+| Paper row | Replay condition | Valid | F raw | F al. [95% CI] | F al. s-n | F al. rescaled | CD al.† | DimE† | VolE† |
+|---|---|---|---|---|---|---|---|---|---|
+| Bare model (N=1) | `raw_mv_bare` | 0/19 | 0.000 | 0.000 | 0.000 | 0.000 | n/a | n/a | n/a |
+| Runtime guards only (N=1) | `raw_mv` | 7/19 | 0.000 | 0.000 | 0.051 | 0.000 | 45.6 | 0.995 | 1.000 |
+| Full shell (N=1) | `multiview_n1` | 19/19 | 0.083 | 0.093 [0.061, 0.127] | 0.126 | 0.072 | 23.8 | 0.590 | 1.208 |
+| Full shell (N=3) | `multiview_n3` | 19/19 | 0.083 | 0.093 [0.061, 0.127] | 0.126 | 0.072 | 23.8 | 0.590 | 1.208 |
+| + OCR dims, naive (N=3) | `full_ocr_naive` | 19/19 | 0.056 | 0.067 [0.038, 0.099] | 0.139 | 0.046 | 30.9 | 0.740 | 1.266 |
+| + OCR dims, floor (N=3) | `full_ocr` | 19/19 | 0.086 | 0.088 [0.061, 0.120] | 0.121 | 0.067 | 23.0 | 0.575 | 1.032 |
+| + GT dims, oracle (N=3) | `full_gt` | 19/19 | 0.111 | 0.122 [0.088, 0.155] | 0.124 | 0.100 | 20.8 | 0.466 | 0.801 |
+| Constant 100×50×30 mm box | `constant_box` | 19/19 | 0.155 | 0.172 [0.122, 0.225] | 0.185 | 0.119 | 17.6 | 0.415 | 2.890 |
+| GT bounding box | `gt_bbox` | 19/19 | 0.408 | 0.418 [0.304, 0.540] | 0.418 | 0.420 | 10.7 | 0.000 | 0.963 |
 
-| Paper row | SVR | Cham. | DimE | VolE | F | Source |
-|---|---|---|---|---|---|---|
-| Naive reader | 0.947 | 32.6 | 0.654 | 0.942 | 0.073 | `ablation_n19_multiview_fullocr_fullgt.json` → `full_ocr` ✅ |
-| With floor | 0.895 | 24.9 | 0.512 | 0.885 | 0.103 | `ablation_n19_fullocr_withfloor.json` → `full_ocr` ✅ |
+Valid counts are identical for seeds 0, 1, 2. Seed SD of mean aligned F: 0 (no dimensions,
+greedy candidate selected everywhere), 0.0015 (OCR), 0.012 (GT). Selecting by positive
+volume in addition to STEP export (`orig_volsel`) changes no selection.
 
-> **Naming hazard.** Both rows are stored under the condition name `full_ocr`, in two
-> different runs. They differ only in the `min_max` argument of
-> `src/dimensions.py::extract_dimensions`: the 15 June 13:21 export was produced without the
-> plausibility floor, the 15 June 14:34 export with it (`min_max = 10`). Nothing inside the
-> JSON records which setting was used — only the export folder distinguishes them. When
-> re-running, encode the setting in the condition name.
+Paired tests quoted in Sections 5.3 and 5.4 (`stats.json` → `orig.paired`; constant-box rows from `orig.vs_constant_box` and `rescaled.vs_constant_box`):
 
----
+| Pair | Result |
+|---|---|
+| bare → full shell N=1 | McNemar p = 3.8e-6 per seed (19 discordant); Wilcoxon p = 8e-6, n = 18 |
+| guards only → full shell N=1 | McNemar p = 4.9e-4 per seed (12 discordant) |
+| full shell N=1 vs N=3 | identical |
+| full shell vs + OCR (floor) | Wilcoxon p = 1.0, n = 3 |
+| full shell vs + GT | +0.029 [0.003, 0.058], p = 0.094, n = 6 |
+| + OCR (floor) vs + GT | +0.033, p = 0.031, n = 6 |
+| naive vs floor OCR | +0.021 [−0.009, 0.057] for the floor, p = 0.074, n = 9 |
+| full shell vs constant box | box higher by 0.079 [0.035, 0.127], p = 0.0033; shell above box on 6 of 19 |
+| + OCR (floor) vs constant box | box higher by 0.083 [0.039, 0.132], p = 0.0020 |
+| + GT vs constant box | box higher by 0.050 [−0.009, 0.111], p = 0.080 |
+| full shell vs constant box, rescaled GT | box higher by 0.048 [0.007, 0.091], p = 0.054 |
 
-## Result files with no corresponding table row
+## Table 4 — mechanism ablation (greedy candidate, N = 1, no dimensions)
 
-| File | Condition | Numbers |
+| Paper row | Replay condition | Valid | F al. | F al. s-n |
+|---|---|---|---|---|
+| Bare model | `raw_mv_bare` | 0/19 | 0.000 | 0.000 |
+| + partial-execution salvage only | `bare_plus_partial` | 0/19 | 0.000 | 0.000 |
+| + scale recovery only | `bare_plus_scale` | 0/19 | 0.000 | 0.000 |
+| + AST repair | `bare_plus_repair` | 10/19 | 0.000 | 0.079 |
+| + AST repair and scale recovery | `bare_plus_repair_scale` | 10/19 | 0.048 | 0.078 |
+| Full shell | `multiview_n1` | 19/19 | 0.093 | 0.126 |
+| − AST repair | `n1_minus_repair` | 7/19 | 0.034 | 0.051 |
+| − partial-execution salvage | `n1_minus_partial` | 10/19 | 0.048 | 0.078 |
+| − result discovery | `n1_minus_discover` | 11/19 | 0.058 | 0.082 |
+| − base-plate removal | `n1_minus_base` | 19/19 | 0.093 | 0.134 |
+| − arc fallback | `n1_minus_arc` | 19/19 | 0.093 | 0.126 |
+| − scale recovery | `n1_minus_scale` | 19/19 | 0.000 | 0.126 |
+
+Firing counts (`stats.json` → `firing.multiview_n1`, divided by 3 seeds): result-variable
+step of AST repair 19, parse fix 12, partial-execution salvage 9, result discovery 8, scale
+recovery 19, base-plate removal 1, arc fallback 0.
+
+## OCR token precision and recall (Section 5.4)
+
+`python -m src.ocr_eval`: on the six dimensioned sheets (26 annotated values), floor
+precision 5/8 = 0.63, naive precision 5/15 = 0.33, recall 5/26 = 0.19. The floor removes all
+five spurious tokens (2 or 4 mm) accepted by the naive reader on four undimensioned sheets.
+
+## Figures
+
+| Figure | File | Script |
 |---|---|---|
-| `ablation_n50_multiview_n3.json` | `multiview_n3`, n = 50 | SVR 0.980, Cham 49.3, DimE 0.614, VolE 0.944, F 0.062 |
-| `ablation_n2_raw_iso.json` | `raw_iso`, n = 2 | early pilot, superseded |
-
-`multiview_n3` at n = 50 is the equal-candidate-budget control for the synthetic split and
-is worth adding to Table 2: at N = 3 without dimensions, validity reaches **0.980** against
-0.880 for `full_ocr`. That is the same direction as the real split — dimension injection
-lowers validity at equal N — evidence the manuscript currently reports only for n = 19.
+| 5 | `figures/prediction_gallery_replay.png` | `tools/make_gallery.py --condition multiview_n3 --seed 0` |
+| 6 | `figures/fig_validity_fidelity_replay.png` | `tools/make_fig_validity_fidelity.py` |
+| Graphical abstract | `figures/graphical_abstract.png` | `tools/make_graphical_abstract.py` |
 
 ---
 
-## Which files carry per-part data
+## Superseded real-split files
 
-Confidence intervals, subgroup breakdowns, and paired tests need the `raw` block.
-
-| File | n | Conditions | Per-part `raw` |
-|---|---|---|---|
-| `ablation_n19_multiview_fullocr_fullgt.json` | 19 | multiview, full_ocr, full_gt | ✅ |
-| `ablation_n19_rawmv_multiviewn3.json` | 19 | raw_mv, multiview_n3 | ✅ |
-| `ablation_n19_fullocr_withfloor.json` | 19 | full_ocr | ✅ |
-| `ablation_n50_multiview_n3.json` | 50 | multiview_n3 | ✅ |
-| `ablation_n50_rawiso_repairiso_multiview_fullocr.json` | 50 | 4 conditions | ❌ aggregates only |
-| `ablation_n50_full_gt.json` | 50 | full_gt | ❌ aggregates only |
-
-**Consequence:** the real split (Table 3, Table 4) supports full statistical analysis —
-bootstrap CIs and paired McNemar / Wilcoxon tests across all five conditions, once the three
-files are merged. The synthetic split (Table 2) does **not**: four of its five rows exist
-only as aggregates, so no interval estimate can be computed for Table 2 without re-running
-that ablation.
-
-Merge the real split and analyse it:
-
-```
-python -m src.merge_results
-python -m src.analyze_results --json results/<merged_n19>.json --pairs raw_mv:multiview_n3,multiview_n3:full_ocr,multiview_n3:full_gt,full_ocr:full_gt
-```
-
-`ablation_n19_analysis.md` in this directory covers only `raw_mv` vs `multiview_n3`, because
-it was run before the other files were recovered. Regenerate it over the merged file.
-
----
-
-## The OCR confidence threshold: resolved
-
-The manuscript states **θ = 0.45**. The working copy of `src/dimensions.py` declared
-`conf_thr = 0.30`, which looked like a contradiction. It is not: the code was edited
-**after** the experiments.
-
-Two snapshots of `src/dimensions.py` survive:
-
-| Snapshot | Date | `conf_thr` | `min_max` |
-|---|---|---|---|
-| `Sketch2CAD-Aktarim.zip` | 15 Jun 2026, 16:31 | **0.45** | 10.0 |
-| `sketch2cad_eval.zip` | 26 Jun 2026, 12:38 | 0.30 | 10.0 |
-
-Only the `full_ocr` condition reads the OCR output (`full_gt` injects ground-truth
-dimensions; every other condition passes `ocr: None`). Every `full_ocr` run in the paper
-predates the change:
-
-| Run | Produces | Threshold in force |
-|---|---|---|
-| 8 Jun 2026, 20:58 | Table 2 `full_ocr` | 0.45 |
-| 15 Jun 2026, 13:21 | Table 4 "Naive reader" | 0.45 |
-| 15 Jun 2026, 14:34 | Table 3 `full_ocr (N=3)`, Table 4 "With floor" | 0.45 |
-| 29 Jun 2026, 15:08 | `raw_mv`, `multiview_n3` — **no OCR** | not applicable |
-
-The 0.30 version therefore never produced a published number. **The manuscript is correct
-and the code had drifted.** `src/dimensions.py` in this repository has been restored to
-`conf_thr = 0.45`, with a comment recording why.
-
-> Caveat: the 8 June run predates the earliest surviving snapshot by a week. 0.45 is
-> attested on 15 June and nothing indicates a change during that week, but it is inferred
-> rather than directly observed for the synthetic run.
-
-## Table 4 is two runs, not one toggle
-
-The "Naive reader" and "With floor" rows come from two separate Colab runs 73 minutes
-apart, not from one run with a flag flipped. Comparing them part by part, **11 of 19 parts
-differ**:
-
-- Four undimensioned parts (real_05, real_06, real_09, real_15) move from F = 0.000 with
-  Chamfer 46–76 mm to usable values — exactly the "spurious small reading shrinks the solid"
-  failure the floor is described as preventing. This corroborates the mechanism.
-- But two parts (real_07, real_13) become **invalid**, and four dimensioned parts change
-  even though the floor should be a no-op for them.
-
-Since candidate sampling is stochastic (N = 3, T = 0.4 in the code) and neither run fixed a seed, the
-reported difference mixes the floor's effect with run-to-run variance. Table 4 is therefore
-suggestive rather than a controlled ablation. Re-running both arms with fixed seeds — ideally
-several — is the way to separate the two.
-
----
-
-## Constant-by-constant audit: manuscript against the code that ran
-
-> This table records the state **as first found**. The four mismatches were resolved in the
-> final manuscript — see "Resolution: applied" at the end of this document.
-
-| Manuscript | Code | Verdict |
-|---|---|---|
-| θ = 0.45 | `conf_thr = 0.45` at run time | ✅ match (see section above) |
-| τ = 0.02·‖bbox(G)‖ | `tau=0.02 * max(diag, 1e-6)` | ✅ match |
-| Canonical fallback 100 mm | `canonical_size = 100.0` | ✅ match |
-| N = 3 candidates | `n_candidates = 3` | ✅ match |
-| Accepted range [1, 10000] mm | `lo = 1.0, hi = 10000.0` | ✅ match |
-| Plausibility floor m = 10 mm | `min_max = 10.0` | ✅ match |
-| **n_s = 8192 surface points** | **`n_points: int = 4000`** | ❌ **mismatch** |
-| **Sampling temperature T = 0.5** | **`temperature: float = 0.4`** | ❌ **mismatch** |
-| **30-second execution timeout** | **`timeout: int = 60`** | ❌ **mismatch** |
-| Backbone "LLaVA-1.5-style 13B" | `StoryGold/bella-v1.0-13b` loaded through `LlavaNextForConditionalGeneration` — LLaVA-NeXT (1.6), described in the project README as a CADCoder fine-tune | ❌ **mismatch** |
-| View labels FRONT / TOP / SIDE | `MULTIVIEW_CLAUSE` in `src/prompt.py` says `ON=front, UST=top, YAN=side` (Turkish) | ❌ **mismatch** |
-
-### n_s = 4000, not 8192 — proven, not inferred
-
-`src/metrics.py` carries the timestamp **31 May 2026 14:31** in every surviving archive,
-which predates all four ablation runs (8 Jun, 15 Jun ×2, 29 Jun). It declares
-`n_points: int = 4000` in both `sample_surface` and `evaluate`, and
-`src/run_baselines.py:170` calls `metrics.evaluate(best["step"], gt_step)` without
-overriding it. No 8192-point version of the file exists anywhere on disk.
-
-This matters beyond bookkeeping. Section 4 explains that "identical solids score F ≈ 0.95
-rather than 1.0" as the practical ceiling of the metric. That ceiling was measured at 4000
-points per surface, not 8192, so the sampling noise floor is higher than the manuscript
-implies — and every reported F-score inherits it.
-
-Point sampling itself is seeded (`seed=1` for the prediction, `seed=2` for the ground truth),
-so evaluation is deterministic given a pair of solids. The run-to-run variance discussed
-above comes from candidate generation, not from the metric.
-
-### T = 0.5 and 30 s — mismatch, with a caveat
-
-`temperature = 0.4` and `timeout = 60` appear in **every** surviving snapshot of
-`src/framework.py` (22 Jun, 23 Jun, and the current copy); no 0.5 / 30 s version exists.
-Neither value is overridden by `_cfg()` in `src/run_baselines.py`, so the defaults are what
-ran. The caveat is that the earliest surviving `framework.py` is dated after the June runs,
-so unlike `n_points` this is strong evidence rather than proof.
-
-Note that Section 5.1 states "the 30-second execution timeout was never reached in practice".
-If the limit was in fact 60 s, that sentence needs rewriting even if no candidate ever timed
-out.
-
-### Resolution: applied
-
-The manuscript has been corrected to match the code that ran. In the final version
-(`Pen2STEP_JCDE_LAST.docx`):
-
-- `n_s = 8192` → **4000** (Section 4 and Appendix B)
-- `T = 0.5` → **0.4** (Sections 3, 5.1, 6 and Appendix B)
-- 30-second timeout → **60-second** (Sections 3, 5.1 and Appendix B)
-- "LLaVA-1.5-style 13B" → the checkpoint is named: **StoryGold/bella-v1.0-13b**, a 13B
-  LLaVA-NeXT CAD-oriented fine-tune, used exactly as released (Sections 3, 5.1, Appendix B,
-  and the label inside Figure 1)
-- Section 3 now states that the benchmark's view labels are the Turkish abbreviations
-  ON / UST / YAN and that the prompt supplies the mapping
-- Appendix A now carries the verbatim prompt from `src/prompt.py` and `src/dimensions.py`
-
-`src/dimensions.py` in this repository keeps `conf_thr = 0.45`, the value that produced the
-published OCR numbers. Code and manuscript now agree on every constant.
-
-## Prompt punctuation normalized
-
-One character in the base instruction of `src/prompt.py` was normalized from an em dash to a
-hyphen ("Output ONLY Python code - no markdown ...") so that the repository and the verbatim
-prompt in Appendix A are byte-identical. This is a cosmetic change to a formatting instruction
-and does not affect the reported reconstruction results; the checkpoint revision pinned in
-Appendix B is the authoritative reproducibility anchor.
+`ablation_n19_*.json` come from an earlier unseeded run (June 2026) in a different library
+environment and no longer back any number in the paper. That run gave the same guards-only
+count (7 of 19) but 15 of 19 for the single-candidate full shell; greedy decoding is not
+bit-reproducible across library and hardware versions. They are kept for the record.

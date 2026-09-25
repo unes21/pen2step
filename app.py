@@ -77,7 +77,7 @@ def _generate(composed_image, prompt, sample_idx: int) -> str:
     if sample_idx == 0:
         kw["do_sample"] = False                      # ilk aday: deterministik
     else:
-        kw.update(do_sample=True, temperature=0.5, top_p=0.9)  # çeşitlilik
+        kw.update(do_sample=True, temperature=0.5, top_p=0.9)  # FrameworkConfig.temperature ile aynı
     out = model.generate(**inputs, **kw)
     return processor.decode(out[0], skip_special_tokens=True)
 

@@ -43,7 +43,7 @@ def _boot_ci(vals, B: int = 10000, seed: int = 0):
 
 def per_condition(raw):
     svr = [1.0 if r.get("step_valid") else 0.0 for r in raw]
-    f = [float(r.get("fscore", 0.0)) if r.get("step_valid") else 0.0 for r in raw]
+    f = [float(r.get("fscore") or 0.0) if r.get("step_valid") else 0.0 for r in raw]
     valid = [r for r in raw if r.get("step_valid")]
     cham = [r.get("chamfer_mm") for r in valid]
     dime = [r.get("dim_error") for r in valid]
@@ -62,7 +62,7 @@ def by_group(raw, key):
     out = {}
     for g, rows in sorted(groups.items(), key=lambda kv: str(kv[0])):
         svr = np.mean([1.0 if r.get("step_valid") else 0.0 for r in rows])
-        f = np.mean([float(r.get("fscore", 0.0)) if r.get("step_valid") else 0.0 for r in rows])
+        f = np.mean([float(r.get("fscore") or 0.0) if r.get("step_valid") else 0.0 for r in rows])
         out[g] = {"n": len(rows), "SVR": float(svr), "F": float(f)}
     return out
 
@@ -81,8 +81,8 @@ def paired(a_raw, b_raw):
     else:
         p_val = float("nan")
     # Wilcoxon on F over samples valid in BOTH
-    fa = [float(a[i].get("fscore", 0.0)) for i in ids if a[i].get("step_valid") and b[i].get("step_valid")]
-    fb = [float(b[i].get("fscore", 0.0)) for i in ids if a[i].get("step_valid") and b[i].get("step_valid")]
+    fa = [float(a[i].get("fscore") or 0.0) for i in ids if a[i].get("step_valid") and b[i].get("step_valid")]
+    fb = [float(b[i].get("fscore") or 0.0) for i in ids if a[i].get("step_valid") and b[i].get("step_valid")]
     if _SCIPY and len(fa) >= 1 and any(x != y for x, y in zip(fa, fb)):
         try:
             p_f = float(wilcoxon(fa, fb).pvalue)

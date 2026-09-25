@@ -1,0 +1,446 @@
+{
+ "summary": {
+  "naive_D": {
+   "read": 15,
+   "gold": 26,
+   "tp": 5,
+   "sheets_with_reads": 5,
+   "precision": 0.3333333333333333,
+   "recall": 0.19230769230769232
+  },
+  "floor_D": {
+   "read": 8,
+   "gold": 26,
+   "tp": 5,
+   "sheets_with_reads": 3,
+   "precision": 0.625,
+   "recall": 0.19230769230769232
+  },
+  "naive_U": {
+   "read": 5,
+   "gold": 0,
+   "tp": 0,
+   "sheets_with_reads": 4,
+   "precision": 0.0,
+   "recall": null
+  },
+  "floor_U": {
+   "read": 0,
+   "gold": 0,
+   "tp": 0,
+   "sheets_with_reads": 0,
+   "precision": null,
+   "recall": null
+  }
+ },
+ "rows": [
+  {
+   "id": "real_01",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [
+    3.0,
+    5.0,
+    8.0
+   ],
+   "gold": [
+    20,
+    30,
+    50,
+    80
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_01",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [],
+   "gold": [
+    20,
+    30,
+    50,
+    80
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_02",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [
+    1.0,
+    3.0,
+    5.0,
+    9.0
+   ],
+   "gold": [
+    6,
+    12,
+    40,
+    50,
+    60
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_02",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [],
+   "gold": [
+    6,
+    12,
+    40,
+    50,
+    60
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_03",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [
+    20.0,
+    30.0,
+    240.0
+   ],
+   "gold": [
+    20,
+    30,
+    50,
+    90,
+    100
+   ],
+   "tp": 2
+  },
+  {
+   "id": "real_03",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [
+    20.0,
+    30.0,
+    240.0
+   ],
+   "gold": [
+    20,
+    30,
+    50,
+    90,
+    100
+   ],
+   "tp": 2
+  },
+  {
+   "id": "real_04",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_04",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_05",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [
+    2.0
+   ],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_05",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_06",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [
+    2.0,
+    4.0
+   ],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_06",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_07",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_07",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_08",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_08",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_09",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [
+    2.0
+   ],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_09",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_10",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_10",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_11",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_11",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_12",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_12",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_13",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_13",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_14",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_14",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_15",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [
+    2.0
+   ],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_15",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_16",
+   "has_dims": false,
+   "variant": "naive",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_16",
+   "has_dims": false,
+   "variant": "floor",
+   "read": [],
+   "gold": [],
+   "tp": 0
+  },
+  {
+   "id": "real_17",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [
+    5.0,
+    40.0
+   ],
+   "gold": [
+    16,
+    20,
+    30,
+    40,
+    50
+   ],
+   "tp": 1
+  },
+  {
+   "id": "real_17",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [
+    5.0,
+    40.0
+   ],
+   "gold": [
+    16,
+    20,
+    30,
+    40,
+    50
+   ],
+   "tp": 1
+  },
+  {
+   "id": "real_18",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [],
+   "gold": [
+    6,
+    16,
+    40
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_18",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [],
+   "gold": [
+    6,
+    16,
+    40
+   ],
+   "tp": 0
+  },
+  {
+   "id": "real_19",
+   "has_dims": true,
+   "variant": "naive",
+   "read": [
+    2.0,
+    14.0,
+    24.0
+   ],
+   "gold": [
+    10,
+    14,
+    24,
+    30
+   ],
+   "tp": 2
+  },
+  {
+   "id": "real_19",
+   "has_dims": true,
+   "variant": "floor",
+   "read": [
+    2.0,
+    14.0,
+    24.0
+   ],
+   "gold": [
+    10,
+    14,
+    24,
+    30
+   ],
+   "tp": 2
+  }
+ ]
+}

@@ -69,21 +69,49 @@ runs, but the dimension pathway is disabled and every part falls back to the can
 The 19 evaluation images, the original camera photographs, and the verified ground-truth
 CadQuery models all ship with this repository under `benchmark/real/`.
 
+Every real-split number in the paper (Tables 3 and 4, Figures 5 and 6) comes from recorded
+generations replayed offline. The shell never feeds an execution result back into generation,
+so the raw text of each candidate is recorded once on a GPU and every shell configuration is
+then re-executed on the CPU on identical model outputs. The recorded generations (seeds 0, 1,
+2; A100, bfloat16, T = 0.5) ship in `results/replay/dump.jsonl`, so no GPU is needed to
+reproduce the tables:
+
+```bash
+python -m src.replay --dump results/replay/dump.jsonl
+python -m src.trivial_replay
+python -m src.stats
+python -m src.ocr_eval
+```
+
+To record new generations (GPU):
+
+```bash
+python -m src.generation_dump --data benchmark/real --seeds 0,1,2 --temperature 0.5 --out results/replay_new/dump.jsonl
+```
+
+`results/PAPER_TABLES.md` maps every number in the paper to its file and key.
+`benchmark/real/manifest_rescaled.jsonl` reassigns the 13 undimensioned parts an independent
+longest edge in [40, 250] mm (seed 42) and is scored alongside the original ground truth.
+
+The earlier live driver is kept; it generates and executes in one pass (GPU):
+
 ```bash
 python -m src.run_baselines --data benchmark/real --conditions raw_mv,multiview_n3 --limit 19
 ```
 
-Seven conditions are defined in `src/run_baselines.py`; `--conditions all` runs every one:
+Seven conditions are defined in `src/run_baselines.py`; `--conditions all` runs every one.
+"Runtime guards" are arc fallback, partial-execution salvage, result discovery and
+base-plate removal (Section 3 of the paper); they are active in every condition of this driver:
 
 | Condition | Input view | Shell | Dimensions | Candidates |
 |---|---|---|---|---|
-| `raw_iso` | isometric | none | none | 1 |
+| `raw_iso` | isometric | runtime guards only | none | 1 |
 | `repair_iso` | isometric | AST repair + scale recovery | none | 1 |
 | `multiview` | composed sheet | full | none | 1 |
 | `multiview_n3` | composed sheet | full | none | 3 |
 | `full_ocr` | composed sheet | full | OCR | 3 |
 | `full_gt` | composed sheet | full | ground truth | 3 |
-| `raw_mv` | composed sheet | none | none | 1 |
+| `raw_mv` | composed sheet | runtime guards only | none | 1 |
 
 `raw_iso` and `repair_iso` need an `image_iso` field, which the real split does not have;
 `raw_mv` is the corresponding baseline there. Results are written to `<data-dir>/results/`.
@@ -117,17 +145,16 @@ results, and paired McNemar / Wilcoxon tests:
 python -m src.analyze_results --json results/ablation_n19_rawmv_multiviewn3.json --pairs raw_mv:multiview_n3
 ```
 
-### Figures and manuscript
+### Figures
 
 ```bash
 python figures/gen_figs.py
+python tools/make_gallery.py --condition multiview_n3 --seed 0
+python tools/make_fig_validity_fidelity.py
+python tools/make_graphical_abstract.py
 ```
 
-```bash
-python paper/build_docx.py
-```
-
-Both write into the repository; neither depends on an absolute path.
+All write into `figures/`; none depends on an absolute path.
 
 ### Interactive demo
 
@@ -146,6 +173,8 @@ src/                          pipeline, metrics, ablation driver, analysis
 app.py                        Gradio demo (4-bit)
 S2CAD.py                      earlier single-image demo, kept for reference
 tools/make_colab_zip.py       packages the repo for a Colab run
+tools/make_gpu_bundle.py      packages the files needed by src/generation_dump.py
+tools/make_*.py               figure scripts (gallery, Figure 6, graphical abstract)
 
 benchmark/
   real/images/                19 evaluation images consumed by the pipeline
@@ -158,8 +187,8 @@ benchmark/
   synthetic/dataset_info.json generation parameters
 
 results/                      every raw ablation file, plus PAPER_TABLES.md
+results/replay/               recorded generations, replay rows, statistics (real split)
 figures/                      paper figures and the script that regenerates them
-paper/build_docx.py          builds the manuscript (Word .docx) with the reported tables
 notebooks/                    Colab notebooks for hosted-GPU runs
 examples/                     sample sketches for the demo
 ```
@@ -169,7 +198,6 @@ examples/                     sample sketches for the demo
 | Excluded | Why |
 |---|---|
 | `data/images/` (~1.2 GB) | Deterministically regenerable with `--seed 0`; the manifest is tracked |
-| `paper/Pen2STEP.docx` | Build output of `paper/build_docx.py` |
 | Model weights | Fetched from Hugging Face at runtime |
 | Literature PDFs | Third-party copyrighted material |
 

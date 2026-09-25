@@ -24,7 +24,7 @@ from dataclasses import dataclass, field
 
 from PIL import Image
 
-from src.prompt import build_prompt
+from src.prompt import build_prompt, build_short_prompt
 from src.code_repair import repair, split_after_assistant, strip_markdown
 from src.multiview import compose_user_images
 from src import dimensions as dim_mod
@@ -41,7 +41,8 @@ class FrameworkConfig:
     normalized_threshold: float = 10.0  # maxdim < bu → normalize kabul et
     remove_base_plate: bool = True   # CADCoder'ın eklediği ince taban levhasını ayıkla
     timeout: int = 60
-    temperature: float = 0.4
+    temperature: float = 0.5
+    use_short_prompt: bool = False   # A7a: minimal talimat ablasyonu (bkz. src/prompt.py)
 
 
 # Model kodundan önce çalışır: dejenere yayları (eşdoğrusal 3 nokta → OCC hatası)
@@ -192,7 +193,12 @@ def sketch_to_cad(images, generate_fn, cfg: FrameworkConfig, work_dir: str,
     hint = dim_mod.build_dimension_hint(dims) if dims else ""
     target_max = max(dims) if dims else None
 
-    prompt = build_prompt(dim_hint=hint, multiview=multiview)
+    if cfg.use_short_prompt:
+        prompt = build_short_prompt(multiview=multiview)
+        if hint:
+            prompt = prompt.replace(" ASSISTANT:", hint + " ASSISTANT:")
+    else:
+        prompt = build_prompt(dim_hint=hint, multiview=multiview)
 
     # 3) N aday üret → onar → çalıştır
     candidates = []

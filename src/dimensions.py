@@ -56,10 +56,7 @@ def _dedup(values, tol_ratio: float = 0.04):
     return out
 
 
-# conf_thr = 0.45 is the value used for every OCR run reported in the paper
-# (synthetic 8 Jun 2026, real 15 Jun 2026). A later edit lowered the default to 0.30;
-# that version never produced a published number, so 0.45 is restored here.
-# If you re-run the ablation at 0.30, update the manuscript to match.
+# conf_thr = 0.45 is the value used for every OCR run reported in the paper.
 def extract_dimensions(image: Image.Image, conf_thr: float = 0.45,
                        lo: float = 1.0, hi: float = 10000.0,
                        upscale: float = 1.5, gpu: bool = False,

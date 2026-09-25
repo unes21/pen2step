@@ -70,7 +70,7 @@ def generate_fn_mac(model, processor, device):
         if i == 0:
             kw["do_sample"] = False
         else:
-            kw.update(do_sample=True, temperature=0.5, top_p=0.9)
+            kw.update(do_sample=True, temperature=0.5, top_p=0.9)  # FrameworkConfig.temperature ile aynı
         out = model.generate(**inputs, **kw)
         return processor.decode(out[0], skip_special_tokens=True)
     return _gen
