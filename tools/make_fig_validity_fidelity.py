@@ -27,10 +27,14 @@ BLUE, ORANGE, GREY = "#2878d6", "#e8663d", "#c8c8c2"
 fig, ax = plt.subplots(figsize=(10, 5.2), dpi=248)
 ys = list(range(len(rows)))[::-1]
 for y, (lab, svr, f) in zip(ys, rows):
+    # when SVR and F coincide (bare model: both 0) the two markers are separated vertically
+    ys_svr, ys_f = (y + 0.12, y - 0.12) if abs(svr - f) < 0.03 else (y, y)
     ax.plot([f, svr], [y, y], color=GREY, lw=3, zorder=1)
-    ax.scatter([svr], [y], s=70, color=BLUE, zorder=3, edgecolor="white", linewidth=1)
-    ax.scatter([f], [y], s=60, color=ORANGE, marker="D", zorder=3, edgecolor="white", linewidth=1)
-    ax.text(f, y - 0.36, f"{f:.3f}", ha="center", va="center", fontsize=8.5, color="#444")
+    ax.scatter([svr], [ys_svr], s=70, color=BLUE, zorder=3, edgecolor="white", linewidth=1)
+    ax.scatter([f], [ys_f], s=60, color=ORANGE, marker="D", zorder=3, edgecolor="white", linewidth=1)
+    if ys_svr != y:
+        ax.text(svr + 0.025, ys_svr, f"SVR {round(svr * 19)}/19", ha="left", va="center", fontsize=8.5, color=BLUE)
+    ax.text(f, ys_f - 0.3, f"{f:.3f}", ha="center", va="center", fontsize=8.5, color="#444")
 ax.axhspan(-0.6, 1.5, color="#f3f3ef", zorder=0)
 ax.text(0.62, 1.33, "input-agnostic baselines", ha="center", va="center", fontsize=8.5, color="#666")
 ax.axvline(ceil, color=ORANGE, ls="--", lw=1.6)
