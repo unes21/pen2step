@@ -39,7 +39,7 @@ result = horiz.union(vert)
 PARTS["03"] = ('''import cadquery as cq
 # U-kanal: uzunluk 100, dış kesit 90x50, et 20 (U açıklığı yukarı)
 outer = cq.Workplane("YZ").box(90, 50, 100, centered=(True, False, True))
-cut   = (cq.Workplane("YZ").workplane(offset=-60)
+cut   = (cq.Workplane("YZ")
          .center(0, 20).box(50, 40, 120, centered=(True, False, True)))
 result = outer.cut(cut)
 ''', "u_channel", [20, 30, 50, 90, 100])

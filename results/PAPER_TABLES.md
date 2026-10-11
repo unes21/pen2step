@@ -67,7 +67,16 @@ pairs reported); exact McNemar per seed for paired validity; Wilson interval on 
 Chamfer, DimE and VolE are averaged over valid solids only. "Aligned" = best of 24
 axis-aligned rotations (minimum Chamfer). "Scale-norm." = prediction rescaled to the
 ground-truth bounding-box diagonal before alignment. Measured F ceiling (ground truth against
-itself, resampled): 0.959, range 0.857 to 0.996.
+itself, resampled): 0.958, range 0.857 to 0.996.
+
+## Correction in v1.2
+
+The ground-truth model of real_03 (U-channel) cut the channel over only half of the part length
+(`workplane(offset=-60)` shifted the cutter to X in [-120, 0] while the part spans [-50, 50]); its volume was
+375,000 mm³ instead of 300,000 mm³. The bounding box is unchanged, so DimE was unaffected. The offset is removed in
+`benchmark/real/gt_models.py`, `manifest.jsonl` and `manifest_rescaled.jsonl`, and every real-split number below is
+re-scored against the corrected model from the same recorded generations (no new generation). Validity counts and the
+ordering of configurations and baselines are unchanged.
 
 ## Table 3 — real hand-drawn split (n = 19)
 
@@ -78,13 +87,13 @@ rescaled-GT column); baselines from `trivial.json`.
 |---|---|---|---|---|---|---|---|---|---|
 | Bare model (N=1) | `raw_mv_bare` | 0/19 | 0.000 | 0.000 | 0.000 | 0.000 | n/a | n/a | n/a |
 | Runtime guards only (N=1) | `raw_mv` | 7/19 | 0.000 | 0.000 | 0.051 | 0.000 | 45.6 | 0.995 | 1.000 |
-| Full shell (N=1) | `multiview_n1` | 19/19 | 0.083 | 0.093 [0.061, 0.127] | 0.126 | 0.072 | 23.8 | 0.590 | 1.208 |
-| Full shell (N=3) | `multiview_n3` | 19/19 | 0.083 | 0.093 [0.061, 0.127] | 0.126 | 0.072 | 23.8 | 0.590 | 1.208 |
-| + OCR dims, naive (N=3) | `full_ocr_naive` | 19/19 | 0.056 | 0.067 [0.038, 0.099] | 0.139 | 0.046 | 30.9 | 0.740 | 1.266 |
-| + OCR dims, floor (N=3) | `full_ocr` | 19/19 | 0.086 | 0.088 [0.061, 0.120] | 0.121 | 0.067 | 23.0 | 0.575 | 1.032 |
-| + GT dims, oracle (N=3) | `full_gt` | 19/19 | 0.111 | 0.122 [0.088, 0.155] | 0.124 | 0.100 | 20.8 | 0.466 | 0.801 |
-| Constant 100×50×30 mm box | `constant_box` | 19/19 | 0.155 | 0.172 [0.122, 0.225] | 0.185 | 0.119 | 17.6 | 0.415 | 2.890 |
-| GT bounding box | `gt_bbox` | 19/19 | 0.408 | 0.418 [0.304, 0.540] | 0.418 | 0.420 | 10.7 | 0.000 | 0.963 |
+| Full shell (N=1) | `multiview_n1` | 19/19 | 0.083 | 0.092 [0.061, 0.126] | 0.126 | 0.071 | 23.9 | 0.590 | 1.209 |
+| Full shell (N=3) | `multiview_n3` | 19/19 | 0.083 | 0.092 [0.061, 0.126] | 0.126 | 0.071 | 23.9 | 0.590 | 1.209 |
+| + OCR dims, naive (N=3) | `full_ocr_naive` | 19/19 | 0.056 | 0.066 [0.037, 0.098] | 0.139 | 0.046 | 31.0 | 0.740 | 1.267 |
+| + OCR dims, floor (N=3) | `full_ocr` | 19/19 | 0.086 | 0.088 [0.061, 0.120] | 0.120 | 0.067 | 23.0 | 0.575 | 1.048 |
+| + GT dims, oracle (N=3) | `full_gt` | 19/19 | 0.114 | 0.124 [0.090, 0.158] | 0.126 | 0.103 | 20.7 | 0.466 | 0.797 |
+| Constant 100×50×30 mm box | `constant_box` | 19/19 | 0.156 | 0.173 [0.123, 0.227] | 0.185 | 0.121 | 17.6 | 0.415 | 2.885 |
+| GT bounding box | `gt_bbox` | 19/19 | 0.397 | 0.408 [0.299, 0.522] | 0.407 | 0.409 | 10.8 | 0.000 | 0.979 |
 
 Valid counts are identical for seeds 0, 1, 2. Seed SD of mean aligned F: 0 (no dimensions,
 greedy candidate selected everywhere), 0.0015 (OCR), 0.012 (GT). Selecting by positive
@@ -98,13 +107,13 @@ Paired tests quoted in Sections 5.3 and 5.4 (`stats.json` → `orig.paired`; con
 | guards only → full shell N=1 | McNemar p = 4.9e-4 per seed (12 discordant) |
 | full shell N=1 vs N=3 | identical |
 | full shell vs + OCR (floor) | Wilcoxon p = 1.0, n = 3 |
-| full shell vs + GT | +0.029 [0.003, 0.058], p = 0.094, n = 6 |
-| + OCR (floor) vs + GT | +0.033, p = 0.031, n = 6 |
-| naive vs floor OCR | +0.021 [−0.009, 0.057] for the floor, p = 0.074, n = 9 |
-| full shell vs constant box | box higher by 0.079 [0.035, 0.127], p = 0.0033; shell above box on 6 of 19 |
-| + OCR (floor) vs constant box | box higher by 0.083 [0.039, 0.132], p = 0.0020 |
-| + GT vs constant box | box higher by 0.050 [−0.009, 0.111], p = 0.080 |
-| full shell vs constant box, rescaled GT | box higher by 0.048 [0.007, 0.091], p = 0.054 |
+| full shell vs + GT | +0.032 [0.009, 0.061], p = 0.031, n = 6 |
+| + OCR (floor) vs + GT | +0.036 [0.011, 0.064], p = 0.031, n = 6 |
+| naive vs floor OCR | +0.022 [−0.007, 0.057] for the floor, p = 0.074, n = 9 |
+| full shell vs constant box | box higher by 0.081 [0.038, 0.129], p = 0.0017; shell above box on 5 of 19 |
+| + OCR (floor) vs constant box | box higher by 0.085 [0.040, 0.134], p = 0.0020 |
+| + GT vs constant box | box higher by 0.049 [−0.010, 0.110], p = 0.096 |
+| full shell vs constant box, rescaled GT | box higher by 0.050 [0.009, 0.092], p = 0.043 |
 
 ## Table 4 — mechanism ablation (greedy candidate, N = 1, no dimensions)
 
@@ -115,12 +124,12 @@ Paired tests quoted in Sections 5.3 and 5.4 (`stats.json` → `orig.paired`; con
 | + scale recovery only | `bare_plus_scale` | 0/19 | 0.000 | 0.000 |
 | + AST repair | `bare_plus_repair` | 10/19 | 0.000 | 0.079 |
 | + AST repair and scale recovery | `bare_plus_repair_scale` | 10/19 | 0.048 | 0.078 |
-| Full shell | `multiview_n1` | 19/19 | 0.093 | 0.126 |
+| Full shell | `multiview_n1` | 19/19 | 0.092 | 0.126 |
 | − AST repair | `n1_minus_repair` | 7/19 | 0.034 | 0.051 |
 | − partial-execution salvage | `n1_minus_partial` | 10/19 | 0.048 | 0.078 |
 | − result discovery | `n1_minus_discover` | 11/19 | 0.058 | 0.082 |
-| − base-plate removal | `n1_minus_base` | 19/19 | 0.093 | 0.134 |
-| − arc fallback | `n1_minus_arc` | 19/19 | 0.093 | 0.126 |
+| − base-plate removal | `n1_minus_base` | 19/19 | 0.098 | 0.138 |
+| − arc fallback | `n1_minus_arc` | 19/19 | 0.092 | 0.126 |
 | − scale recovery | `n1_minus_scale` | 19/19 | 0.000 | 0.126 |
 
 Firing counts (`stats.json` → `firing.multiview_n1`, divided by 3 seeds): result-variable
