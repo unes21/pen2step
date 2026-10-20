@@ -278,11 +278,121 @@ def aggregate(results: list[dict]) -> dict:
     }
 
 
+MANIFEST_REQUIRED = {"id": str, "image_mv": str, "family": str, "oem_no": str, "drawer_role": str,
+                     "n_dims_annotated": int, "annotated_dims": list, "drawer_confidence": int,
+                     "sketch_minutes": (int, float), "has_dims": bool, "split": str, "code": str}
+DRAWER_ROLES = {"mechanic", "engineer", "student"}
+CEILING_MIN = 0.85
+SECOND_CHECK_TOL = 0.02
+
+
+def selfcheck(split: str) -> int:
+    """Checks every ground-truth model of a benchmark split (work package IP4).
+
+    For each manifest row: required fields and value ranges; the CadQuery code builds a solid with
+    positive volume; the committed benchmark/<split>/gt/<id>.step matches the code (volume within
+    0.1%); the self F-score ceiling (two independent surface samples) is at least 0.85; and the
+    independent second check (gt_second_check.csv) lists at least three dimensions, each within 2%.
+    Returns the number of failed parts (0 = pass).
+    """
+    import csv
+    import json
+    import tempfile
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent / "benchmark" / split
+    man = root / "manifest.jsonl"
+    rows = [json.loads(l) for l in man.read_text(encoding="utf-8").splitlines() if l.strip()] if man.exists() else []
+    if not rows:
+        print(f"{man}: no parts yet")
+        return 0
+    checks = {}
+    sc = root / "gt_second_check.csv"
+    if sc.exists():
+        with sc.open(encoding="utf-8", newline="") as fh:
+            for r in csv.DictReader(fh):
+                checks.setdefault(r["part_id"], []).append(r)
+    failed, tmp = 0, Path(tempfile.mkdtemp())
+    seen = set()
+    for m in rows:
+        pid, errs = m.get("id", "?"), []
+        if pid in seen:
+            errs.append("duplicate id")
+        seen.add(pid)
+        for k, t in MANIFEST_REQUIRED.items():
+            if k not in m:
+                errs.append(f"missing {k}")
+            elif not isinstance(m[k], t) or (t is int and isinstance(m[k], bool)):
+                errs.append(f"{k} has type {type(m[k]).__name__}")
+        if m.get("drawer_role") not in DRAWER_ROLES:
+            errs.append(f"drawer_role {m.get('drawer_role')!r} not in {sorted(DRAWER_ROLES)}")
+        if isinstance(m.get("n_dims_annotated"), int) and m["n_dims_annotated"] < 3:
+            errs.append("fewer than 3 annotated dimensions")
+        if isinstance(m.get("annotated_dims"), list) and len(m["annotated_dims"]) != m.get("n_dims_annotated"):
+            errs.append("len(annotated_dims) != n_dims_annotated")
+        if isinstance(m.get("drawer_confidence"), int) and not 1 <= m["drawer_confidence"] <= 5:
+            errs.append("drawer_confidence outside 1..5")
+        if m.get("split") != split:
+            errs.append(f"split {m.get('split')!r} != {split!r}")
+        if m.get("image_mv") and not (root / m["image_mv"]).exists():
+            errs.append(f"image {m['image_mv']} not found")
+        vol, ceil = None, None
+        if isinstance(m.get("code"), str) and m["code"].strip():
+            try:
+                ns = {}
+                exec(m["code"], ns)
+                built = tmp / f"{pid}.step"
+                cq.exporters.export(ns["result"], str(built))
+                shape = load_shape(str(built))
+                vol = shape.Volume()
+                if not vol > 0:
+                    errs.append("non-positive volume")
+                committed = root / "gt" / f"{pid}.step"
+                if not committed.exists():
+                    errs.append(f"gt/{pid}.step not committed")
+                else:
+                    cv = load_shape(str(committed)).Volume()
+                    if abs(cv - vol) > 1e-3 * max(vol, 1e-9):
+                        errs.append(f"gt/{pid}.step volume {cv:.1f} != code volume {vol:.1f}")
+                if not (root / "gt" / f"{pid}.py").exists():
+                    errs.append(f"gt/{pid}.py not committed")
+                a = _center(sample_surface(shape, 4000, seed=1))
+                b = _center(sample_surface(shape, 4000, seed=2))
+                ceil = fscore(a, b, 0.02 * float(np.linalg.norm(bbox_dims(shape))))
+                if ceil < CEILING_MIN:
+                    errs.append(f"self ceiling {ceil:.3f} < {CEILING_MIN}")
+            except Exception as exc:  # noqa: BLE001 - report every failure, do not stop at the first
+                errs.append(f"code failed: {exc!r}")
+        c = checks.get(pid, [])
+        if len(c) < 3:
+            errs.append(f"second check lists {len(c)} dimensions (need 3)")
+        for r in c:
+            try:
+                d = abs(float(r["measured_mm"]) - float(r["model_mm"])) / float(r["measured_mm"])
+            except (KeyError, ValueError, ZeroDivisionError):
+                errs.append(f"second check row unreadable: {r}")
+                continue
+            if d > SECOND_CHECK_TOL:
+                errs.append(f"second check {r.get('dim_name')}: {100 * d:.1f}% > 2%")
+        status = "ok  " if not errs else "FAIL"
+        failed += bool(errs)
+        v = f"{vol:.0f}" if vol is not None else "-"
+        cs = f"{ceil:.3f}" if ceil is not None else "-"
+        print(f"{status} {pid:12s} volume {v:>10s} mm3  ceiling {cs}  " + "; ".join(errs))
+    print(f"{len(rows) - failed}/{len(rows)} parts pass")
+    return failed
+
+
 def _main():
-    ap = argparse.ArgumentParser(description="İki STEP dosyasını karşılaştır.")
-    ap.add_argument("pred", help="Tahmin edilen .step")
-    ap.add_argument("gt", help="Ground-truth .step")
+    ap = argparse.ArgumentParser(description="İki STEP dosyasını karşılaştır, ya da bir bölümün GT modellerini denetle.")
+    ap.add_argument("pred", nargs="?", help="Tahmin edilen .step")
+    ap.add_argument("gt", nargs="?", help="Ground-truth .step")
+    ap.add_argument("--split", default=None, help="benchmark split for --selfcheck (e.g. equipment)")
+    ap.add_argument("--selfcheck", action="store_true", help="check every ground-truth model of --split")
     args = ap.parse_args()
+    if args.selfcheck:
+        sys.exit(1 if selfcheck(args.split or "equipment") else 0)
+    if not (args.pred and args.gt):
+        ap.error("pred and gt are required unless --selfcheck is given")
     res = evaluate(args.pred, args.gt)
     print("\nMetrikler:")
     for k, v in res.items():

@@ -1,0 +1,4 @@
+# Optional: frontier VLM arm (src/backends, src/generation_dump_api.py). Versions used are recorded in results/replay/provenance.json.
+anthropic
+openai
+google-genai

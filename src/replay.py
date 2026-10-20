@@ -270,6 +270,8 @@ def main():
 
     gt_dirs = {}
     for tag, man in [("orig", "manifest.jsonl"), ("rescaled", "manifest_rescaled.jsonl")]:
+        if not (data / man).exists():
+            man = "manifest.jsonl"  # splits without undimensioned parts (equipment) have no rescaled variant
         d = out / f"gt_{tag}"
         d.mkdir(exist_ok=True)
         for l in (data / man).read_text(encoding="utf-8").splitlines():

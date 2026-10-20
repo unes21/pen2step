@@ -15,10 +15,18 @@ Conventions, applied uniformly:
 
 Usage:
     python -m src.stats --rows results/replay/replay_rows.json --out results/replay/stats.json
+    python src/stats.py --backend anthropic                 # results/replay_anthropic/
+    python src/stats.py --backend openai --split equipment  # results/replay_openai_equipment/
+    python src/stats.py --split equipment                   # open backbone, results/replay_equipment/
+    python src/stats.py --workflow                          # time study and blind RFQ ratings (IP5)
+
+Workflow statistics are descriptive only (n is small): counts and proportions with Wilson 95%
+intervals, medians and interquartile ranges; no statistical model and no hypothesis test.
 """
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
 from collections import defaultdict
@@ -107,13 +115,87 @@ PAIRS = [("raw_mv_bare", "raw_mv"), ("raw_mv_bare", "multiview_n1"), ("raw_mv", 
          ("full_ocr", "full_gt"), ("full_ocr_naive", "full_ocr")]
 
 
+def _read_csv(path):
+    p = Path(path)
+    if not p.exists():
+        return []
+    with p.open(encoding="utf-8", newline="") as fh:
+        return [r for r in csv.DictReader(fh) if any((v or "").strip() for v in r.values())]
+
+
+def _quart(v):
+    v = [float(x) for x in v if x not in (None, "")]
+    if not v:
+        return None
+    q1, med, q3 = np.percentile(v, [25, 50, 75])
+    return {"n": len(v), "median": float(med), "q1": float(q1), "q3": float(q3)}
+
+
+def workflow(ratings_path, tasks_path, out_path):
+    """IP5: blind supplier ratings of RFQs (task A: current practice, task B: with Pen2STEP)."""
+    R, T = _read_csv(ratings_path), _read_csv(tasks_path)
+    res = {"ratings_file": str(ratings_path), "tasks_file": str(tasks_path), "tasks": {}}
+    yes = lambda r: (r.get("q1_quote_without_callback") or "").strip().lower() in ("yes", "evet", "y", "1", "true")
+    for task in sorted({r["task"] for r in R} | {r["task"] for r in T}):
+        rr = [r for r in R if r["task"] == task]
+        k = sum(yes(r) for r in rr)
+        per_rfq = defaultdict(list)
+        for r in rr:
+            per_rfq[r["rfq_id"]].append(yes(r))
+        both = sum(all(v) for v in per_rfq.values() if len(v) >= 2)
+        n_two = sum(1 for v in per_rfq.values() if len(v) >= 2)
+        agree = sum(len(set(v)) == 1 for v in per_rfq.values() if len(v) >= 2)
+        tt = [r for r in T if r["task"] == task]
+        res["tasks"][task] = {
+            "n_rfq": len(per_rfq), "n_ratings": len(rr),
+            "quote_without_callback": {"k": k, "n": len(rr), "p": k / len(rr) if rr else None,
+                                       "wilson": wilson(k, len(rr))},
+            "both_raters_yes": {"k": both, "n": n_two, "p": both / n_two if n_two else None,
+                                "wilson": wilson(both, n_two)},
+            "rater_agreement_q1": {"k": agree, "n": n_two, "p": agree / n_two if n_two else None},
+            "hours_to_quote": _quart([r.get("q2_hours_to_quote") for r in rr]),
+            "total_minutes": _quart([r.get("total_minutes") for r in tt]),
+            "sketch_minutes": _quart([r.get("sketch_minutes") for r in tt]),
+            "pen2step_runtime_s": _quart([r.get("pen2step_runtime_s") for r in tt]),
+        }
+    Path(out_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(out_path).write_text(json.dumps(res, indent=1), encoding="utf-8")
+    if not R and not T:
+        print(f"no workflow data yet ({ratings_path}, {tasks_path}); empty summary written to {out_path}")
+        return res
+    print(f"{'task':5s} {'RFQs':>4s} {'ratings':>7s}  quote w/o callback [Wilson 95%]   both raters yes   "
+          f"hours to quote (median, IQR)   total minutes (median, IQR)")
+    for task, v in res["tasks"].items():
+        q, b, h, m = v["quote_without_callback"], v["both_raters_yes"], v["hours_to_quote"], v["total_minutes"]
+        fq = f"{q['k']}/{q['n']} [{q['wilson'][0]:.2f}, {q['wilson'][1]:.2f}]" if q["n"] else "n/a"
+        fb = f"{b['k']}/{b['n']}" if b["n"] else "n/a"
+        fh = f"{h['median']:.1f} ({h['q1']:.1f}-{h['q3']:.1f})" if h else "n/a"
+        fm = f"{m['median']:.1f} ({m['q1']:.1f}-{m['q3']:.1f})" if m else "n/a"
+        print(f"{task:5s} {v['n_rfq']:4d} {v['n_ratings']:7d}  {fq:32s} {fb:17s} {fh:30s} {fm}")
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--rows", default="results/replay/replay_rows.json")
-    ap.add_argument("--out", default="results/replay/stats.json")
-    ap.add_argument("--trivial", default="results/replay/trivial.json",
-                    help="src/trivial_replay.py output; adds paired tests against the constant box")
+    ap.add_argument("--rows", default=None, help="default: results/replay[_<backend>][_equipment]/replay_rows.json")
+    ap.add_argument("--out", default=None, help="default: next to --rows, stats.json")
+    ap.add_argument("--trivial", default=None,
+                    help="src/trivial_replay.py output; adds paired tests against the constant box "
+                         "(default: results/replay[_equipment]/trivial.json)")
+    ap.add_argument("--backend", default=None, help="recorded backend name, e.g. anthropic, openai, gemini")
+    ap.add_argument("--split", default="real", choices=["real", "equipment"])
+    ap.add_argument("--workflow", action="store_true", help="summarise the time study and RFQ ratings instead")
+    ap.add_argument("--ratings", default="results/workflow/rfq_ratings.csv")
+    ap.add_argument("--tasks", default="results/workflow/task_times.csv")
     args = ap.parse_args()
+    if args.workflow:
+        workflow(args.ratings, args.tasks, args.out or "results/workflow/workflow_stats.json")
+        return
+    eq = "_equipment" if args.split == "equipment" else ""
+    base = f"results/replay{'_' + args.backend if args.backend else ''}{eq}"
+    args.rows = args.rows or f"{base}/replay_rows.json"
+    args.out = args.out or str(Path(args.rows).with_name("stats.json"))
+    args.trivial = args.trivial or f"results/replay{eq}/trivial.json"
     D = json.loads(Path(args.rows).read_text(encoding="utf-8"))
     rows, seeds = D["rows"], D["seeds"]
     parts = sorted({r["id"] for r in rows})
