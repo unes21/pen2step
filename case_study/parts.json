@@ -1,0 +1,510 @@
+[
+ {
+  "id": "cs_01",
+  "name_tr": "Burç DU-B 60x65x30",
+  "name_en": "Bush DU-B 60x65x30",
+  "catalogue_no": "065993000",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "iç çap",
+    60
+   ],
+   [
+    "dış çap",
+    65
+   ],
+   [
+    "boy",
+    30
+   ]
+  ],
+  "volume_mm3": 14726.2
+ },
+ {
+  "id": "cs_02",
+  "name_tr": "Burç DU-B 50x55x30",
+  "name_en": "Bush DU-B 50x55x30",
+  "catalogue_no": "043693005",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "iç çap",
+    50
+   ],
+   [
+    "dış çap",
+    55
+   ],
+   [
+    "boy",
+    30
+   ]
+  ],
+  "volume_mm3": 12370.0
+ },
+ {
+  "id": "cs_03",
+  "name_tr": "Burç DU-B Ø40x44x30",
+  "name_en": "Bush DU-B Ø40x44x30",
+  "catalogue_no": "430423",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "iç çap",
+    40
+   ],
+   [
+    "dış çap",
+    44
+   ],
+   [
+    "boy",
+    30
+   ]
+  ],
+  "volume_mm3": 7916.8
+ },
+ {
+  "id": "cs_04",
+  "name_tr": "Burç 21x13x12",
+  "name_en": "Bush 21x13x12",
+  "catalogue_no": "716572",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "dış çap",
+    21
+   ],
+   [
+    "iç çap",
+    13
+   ],
+   [
+    "boy",
+    12
+   ]
+  ],
+  "volume_mm3": 2563.5
+ },
+ {
+  "id": "cs_05",
+  "name_tr": "Plastik plaka 190x80x10",
+  "name_en": "Plastic plate 190x80x10",
+  "catalogue_no": "651985",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "uzunluk",
+    190
+   ],
+   [
+    "genişlik",
+    80
+   ],
+   [
+    "kalınlık",
+    10
+   ]
+  ],
+  "volume_mm3": 152000.0
+ },
+ {
+  "id": "cs_06",
+  "name_tr": "Plastik plaka 144x55x5",
+  "name_en": "Plastic plate 144x55x5",
+  "catalogue_no": "651987",
+  "dimension_source": "catalogue",
+  "dims": [
+   [
+    "uzunluk",
+    144
+   ],
+   [
+    "genişlik",
+    55
+   ],
+   [
+    "kalınlık",
+    5
+   ]
+  ],
+  "volume_mm3": 39600.0
+ },
+ {
+  "id": "cs_07",
+  "name_tr": "Altı köşe cıvata M8x25 DIN 933",
+  "name_en": "Hexagon head screw M8x25 DIN 933",
+  "catalogue_no": "032338009",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    13
+   ],
+   [
+    "baş yüksekliği",
+    5.3
+   ],
+   [
+    "gövde çapı",
+    8
+   ],
+   [
+    "gövde boyu",
+    25
+   ]
+  ],
+  "volume_mm3": 2032.3
+ },
+ {
+  "id": "cs_08",
+  "name_tr": "Altı köşe cıvata M10x25 DIN 933",
+  "name_en": "Hexagon head screw M10x25 DIN 933",
+  "catalogue_no": "032357006",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    17
+   ],
+   [
+    "baş yüksekliği",
+    6.4
+   ],
+   [
+    "gövde çapı",
+    10
+   ],
+   [
+    "gövde boyu",
+    25
+   ]
+  ],
+  "volume_mm3": 3565.3
+ },
+ {
+  "id": "cs_09",
+  "name_tr": "Altı köşe cıvata M12x30 DIN 933",
+  "name_en": "Hexagon head screw M12x30 DIN 933",
+  "catalogue_no": "280646006",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    19
+   ],
+   [
+    "baş yüksekliği",
+    7.5
+   ],
+   [
+    "gövde çapı",
+    12
+   ],
+   [
+    "gövde boyu",
+    30
+   ]
+  ],
+  "volume_mm3": 5737.7
+ },
+ {
+  "id": "cs_10",
+  "name_tr": "Altı köşe cıvata M10x130 DIN 931",
+  "name_en": "Hexagon head screw M10x130 DIN 931",
+  "catalogue_no": "032157002",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    17
+   ],
+   [
+    "baş yüksekliği",
+    6.4
+   ],
+   [
+    "gövde çapı",
+    10
+   ],
+   [
+    "gövde boyu",
+    130
+   ]
+  ],
+  "volume_mm3": 11812.0
+ },
+ {
+  "id": "cs_11",
+  "name_tr": "Kendinden kilitli somun M8 DIN 985",
+  "name_en": "Self-locking hex nut M8 DIN 985",
+  "catalogue_no": "293146001",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    13
+   ],
+   [
+    "yükseklik",
+    8
+   ],
+   [
+    "delik çapı",
+    8
+   ]
+  ],
+  "volume_mm3": 768.7
+ },
+ {
+  "id": "cs_12",
+  "name_tr": "Kendinden kilitli somun M10 DIN 985",
+  "name_en": "Self-locking hex nut M10 DIN 985",
+  "catalogue_no": "034106006",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "anahtar ağzı",
+    17
+   ],
+   [
+    "yükseklik",
+    10
+   ],
+   [
+    "delik çapı",
+    10
+   ]
+  ],
+  "volume_mm3": 1717.4
+ },
+ {
+  "id": "cs_13",
+  "name_tr": "Pul A8,4 DIN 125",
+  "name_en": "Washer A8.4 DIN 125",
+  "catalogue_no": "037107002",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "iç çap",
+    8.4
+   ],
+   [
+    "dış çap",
+    16
+   ],
+   [
+    "kalınlık",
+    1.6
+   ]
+  ],
+  "volume_mm3": 233.0
+ },
+ {
+  "id": "cs_14",
+  "name_tr": "Pul B10,5 DIN 125",
+  "name_en": "Washer B10.5 DIN 125",
+  "catalogue_no": "037108001",
+  "dimension_source": "DIN",
+  "dims": [
+   [
+    "iç çap",
+    10.5
+   ],
+   [
+    "dış çap",
+    20
+   ],
+   [
+    "kalınlık",
+    2
+   ]
+  ],
+  "volume_mm3": 455.1
+ },
+ {
+  "id": "cs_15",
+  "name_tr": "Yatak pimi Ø40 (temsili)",
+  "name_en": "Hinge pin Ø40 (representative)",
+  "catalogue_no": "716642",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "pim çapı",
+    40
+   ],
+   [
+    "pim boyu",
+    150
+   ],
+   [
+    "baş çapı",
+    60
+   ],
+   [
+    "baş kalınlığı",
+    10
+   ],
+   [
+    "baş deliği",
+    13
+   ]
+  ],
+  "volume_mm3": 215442.6
+ },
+ {
+  "id": "cs_16",
+  "name_tr": "Yatak pimi Ø50 (temsili)",
+  "name_en": "Hinge pin Ø50 (representative)",
+  "catalogue_no": "716643",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "pim çapı",
+    50
+   ],
+   [
+    "pim boyu",
+    180
+   ],
+   [
+    "baş çapı",
+    75
+   ],
+   [
+    "baş kalınlığı",
+    12
+   ],
+   [
+    "baş deliği",
+    13
+   ]
+  ],
+  "volume_mm3": 404850.8
+ },
+ {
+  "id": "cs_17",
+  "name_tr": "Yatak pimi Ø60 (temsili)",
+  "name_en": "Hinge pin Ø60 (representative)",
+  "catalogue_no": "716645",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "pim çapı",
+    60
+   ],
+   [
+    "pim boyu",
+    200
+   ],
+   [
+    "baş çapı",
+    90
+   ],
+   [
+    "baş kalınlığı",
+    12
+   ],
+   [
+    "baş deliği",
+    13
+   ]
+  ],
+  "volume_mm3": 640234.6
+ },
+ {
+  "id": "cs_18",
+  "name_tr": "Aks tutma plakası (temsili)",
+  "name_en": "Bolt locating plate (representative)",
+  "catalogue_no": "716565",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "uzunluk",
+    80
+   ],
+   [
+    "genişlik",
+    40
+   ],
+   [
+    "kalınlık",
+    8
+   ],
+   [
+    "delik çapı",
+    9
+   ],
+   [
+    "delik aralığı",
+    50
+   ]
+  ],
+  "volume_mm3": 24582.1
+ },
+ {
+  "id": "cs_19",
+  "name_tr": "Aks tutma plakası, yarıklı (temsili)",
+  "name_en": "Slotted bolt locating plate (representative)",
+  "catalogue_no": "717005",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "uzunluk",
+    70
+   ],
+   [
+    "genişlik",
+    35
+   ],
+   [
+    "kalınlık",
+    6
+   ],
+   [
+    "yarık genişliği",
+    12
+   ],
+   [
+    "yarık derinliği",
+    20
+   ],
+   [
+    "delik çapı",
+    9
+   ]
+  ],
+  "volume_mm3": 12878.3
+ },
+ {
+  "id": "cs_20",
+  "name_tr": "Boru tutma braketi (temsili)",
+  "name_en": "Pipe holder bracket (representative)",
+  "catalogue_no": "677053",
+  "dimension_source": "representative",
+  "dims": [
+   [
+    "taban",
+    "100 x 60 x 8"
+   ],
+   [
+    "dikey kol yüksekliği",
+    90
+   ],
+   [
+    "kol kalınlığı",
+    8
+   ],
+   [
+    "boru deliği çapı",
+    40
+   ],
+   [
+    "taban delikleri",
+    "2 x Ø11, 70 aralık"
+   ]
+  ],
+  "volume_mm3": 79626.4
+ }
+]
