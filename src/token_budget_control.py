@@ -23,7 +23,7 @@ import accelerate
 import torch
 import transformers
 from PIL import Image
-from transformers import AutoProcessor, LlavaNextForConditionalGeneration
+from transformers import AutoProcessor, LlavaNextForConditionalGeneration, StoppingCriteria, StoppingCriteriaList
 
 from src.prompt import build_prompt
 
@@ -33,10 +33,25 @@ MAX_NEW_TOKENS = 2048
 REPETITION_PENALTY = 1.1
 
 
+class Progress(StoppingCriteria):
+    """Never stops generation; reports the rate during long offloaded runs."""
+
+    def __init__(self, every=100):
+        self.every, self.n, self.t0 = every, 0, time.time()
+
+    def __call__(self, input_ids, scores, **kwargs):
+        self.n += 1
+        if self.n % self.every == 0:
+            print(f"  {self.n} tok, {(time.time() - self.t0) / self.n:.2f} s/tok", flush=True)
+        return torch.zeros(input_ids.shape[0], dtype=torch.bool, device=input_ids.device)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--splits", default="benchmark/real,benchmark/case_study")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--max-gpu-gib", type=float, default=None,
+                    help="cap GPU memory for weights on small GPUs; the rest is offloaded to CPU")
     a = ap.parse_args()
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -50,8 +65,10 @@ def main():
     out.with_name("environment.json").write_text(json.dumps(env, indent=2), encoding="utf-8")
     print("environment:", env, flush=True)
     processor = AutoProcessor.from_pretrained(MODEL_ID, revision=REVISION)
+    mm = {0: f"{a.max_gpu_gib}GiB", "cpu": "24GiB"} if a.max_gpu_gib else None
     model = LlavaNextForConditionalGeneration.from_pretrained(
-        MODEL_ID, revision=REVISION, torch_dtype=torch.bfloat16, device_map="auto", low_cpu_mem_usage=True)
+        MODEL_ID, revision=REVISION, torch_dtype=torch.bfloat16, device_map="auto", max_memory=mm,
+        low_cpu_mem_usage=True)
     model.eval()
     eos = processor.tokenizer.eos_token_id
     prompt = build_prompt(dim_hint="", multiview=True)
@@ -68,7 +85,8 @@ def main():
                 t0 = time.time()
                 with torch.inference_mode():
                     o = model.generate(**inputs, max_new_tokens=MAX_NEW_TOKENS, do_sample=False,
-                                       repetition_penalty=REPETITION_PENALTY, pad_token_id=eos)
+                                       repetition_penalty=REPETITION_PENALTY, pad_token_id=eos,
+                                       stopping_criteria=StoppingCriteriaList([Progress()]))
                 n_new = int(o.shape[1] - inputs["input_ids"].shape[1])
                 ended_eos = bool(o[0, -1].item() == eos)
                 r = {"seed": 0, "id": rec["id"], "split": data.name, "key": "mv", "idx": 0, "dims": [],
