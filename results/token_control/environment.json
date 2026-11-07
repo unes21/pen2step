@@ -1,0 +1,10 @@
+{
+  "python": "3.13.16",
+  "torch": "2.14.1+cu130",
+  "transformers": "5.22.1",
+  "accelerate": "1.15.0",
+  "gpu": "NVIDIA A100-SXM4-40GB",
+  "model": "StoryGold/bella-v1.0-13b",
+  "revision": "af7c325f8e5743d605fe199290081d6ee8024951",
+  "max_new_tokens": 2048
+}
