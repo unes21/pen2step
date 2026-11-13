@@ -1,0 +1,2 @@
+inference/inference_results/CAD-Coder/cadquery_test_data_subset100: 100 generations, tokens min 185 median 495 max 2934, reached limit 0
+inference/inference_results/CAD-Coder/pen2step_27: 27 generations, tokens min 2044 median 2880 max 3450, reached limit 5

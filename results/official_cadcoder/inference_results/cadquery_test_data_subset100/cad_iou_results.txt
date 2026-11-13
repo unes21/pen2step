@@ -1,0 +1,4 @@
+Model: CAD-Coder
+Test set: cadquery_test_data_subset100
+Average IoU: 0.6742078460099162
+Number of valid steps: 100
