@@ -47,12 +47,14 @@ def build_prompt(dim_hint: str = "", multiview: bool = False) -> str:
 
 
 # ── Kısa/minimal talimat (hakem yanıtı, A7a) ─────────────────────────────────
-# CAD-Coder'ın (Doris et al., 2025) gerçek eğitim/çıkarım prompt'u kamuya açık
-# kaynaklarda (GitHub, HuggingFace model kartı, örnek Space) belgelenmemiş —
-# UYDURULMADI. Bunun yerine, "raw_mv'nin düşük geçerliliği kısmen bizim
-# 80-kelimelik özel talimatımızın modelin alışık olmadığı bir format istemesi
-# olabilir mi?" sorusunu test eden, dürüstçe etiketlenmiş KISA bir talimat.
-# Bu, CAD-Coder'ın kendi eğitim prompt'unun yeniden üretimi OLARAK SUNULMAZ.
+# Düzeltme: CAD-Coder'ın (Doris et al., 2025) resmî çıkarım istemi kamuya açıktır:
+# github.com/anniedoris/CAD-Coder, inference/cadquery_test_data_subset100.jsonl
+# ("Generate the CADQuery code needed to create the CAD for the provided image.
+# Just the code, no other words.", conv-mode vicuna_v1, sıcaklık 0, 3450 token;
+# scripts/v1_5/eval/test_gencadcode.sh). Daha önce burada yazan "kamuya açık değil"
+# notu yanlıştı. Resmî istemle resmî betiğin bu çizimlerdeki sonucu için bkz.
+# tools/official_cadcoder/. Aşağıdaki kısa talimat resmî istem DEĞİLDİR; yalnız
+# bizim 80 kelimelik talimatımızın etkisini sınamak için yazılmış bir varyanttır.
 SHORT_INSTRUCTION = (
     "Generate CadQuery Python code for this CAD shape. "
     "Store the final shape in a variable called 'result'."
@@ -65,6 +67,7 @@ def build_short_prompt(multiview: bool = False) -> str:
     Ana INSTRUCTION'dan farklı olarak: primitif listesi, uzunluk sınırı, ve
     markdown yasağı yok — CAD-Coder'ın kendi kısa örnek kullanım stiline
     (bkz. HF Space placeholder: "create a rectangular plate ...") daha yakın.
+    Resmî CAD-Coder istemi değildir (bkz. yukarıdaki not ve tools/official_cadcoder/).
     """
     instr = SHORT_INSTRUCTION
     if multiview:
