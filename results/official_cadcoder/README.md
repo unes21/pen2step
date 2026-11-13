@@ -24,3 +24,11 @@ transformers 4.37.2; CadQuery 2.7.0 from pip instead of conda-forge), `run.log`.
 
 Deviations from the README: CadQuery installed with pip; the CAD step was run with `--parallel` as in the
 README. No program was time-limited in this run.
+
+## Scoring (benchmark paper, Tables 2-4 and A1)
+
+`score/scores.json` is written by `python tools/score_official.py --out results/official_cadcoder/score`
+(CadQuery 2.7.0, Python 3.11): official and strict validity, the shell conditions of `src/replay.py`
+replayed on the official text, the two image-blind boxes, bootstrap intervals and exact tests.
+`score/earlier_vs_official.json` compares the aligned F-score of the full shell on the earlier
+configuration's recordings (results/replay, seed means) with the same shell on the official outputs.
