@@ -1,20 +1,23 @@
-# Pen2STEP
+# Pen2STEP-Bench
 
-**Training-free conversion of hand-drawn engineering sketches to parametric CAD models using a frozen vision-language model.**
+**Evaluating an open image-to-CAD model on photographed hand sketches of construction equipment parts.**
 
-Pen2STEP takes a photograph of a hand-drawn multi-view engineering sheet and returns an
-editable parametric solid exported to STEP. No component is trained or fine-tuned here: a
-frozen open-weight vision-language model is wrapped in a deterministic engineering shell
-that performs multi-view composition, OCR-based dimension extraction and prompt injection,
-N-candidate sampling, AST-level repair, execution-guided selection, and metric scale recovery.
+Pen2STEP-Bench contains 27 hand-drawn three-view sheets with verified ground-truth CadQuery
+models and STEP solids: 19 development sheets drawn by the authors (`benchmark/real`) and 8 spare
+parts of a concrete placing boom drawn by a practising engineer outside the author group
+(`benchmark/case_study`, `case_study/`). CAD-Coder is evaluated under its released protocol on these
+sheets and on its own 100-sample test subset (`results/official_cadcoder`, `tools/official_cadcoder`);
+every number of the paper's Tables 2-4 and A1 is produced by `tools/score_official.py`
+(`results/official_cadcoder/score`).
 
-This repository holds everything behind the manuscript: the pipeline, the Pen2STEP-Bench
-benchmark including the original photographs, the verified ground-truth models, the raw
-ablation output, the analysis scripts, the figures, and the manuscript build scripts.
+The deterministic inference-time shell, the recorded generations and the offline replay of the
+earlier configuration (a third-party checkpoint, a custom instruction and a 512-token limit) are kept
+below, because the paper reports how those settings produced a misleading baseline
+(`results/replay`, `results/replay_case`, `results/token_control`). The blind shape-class rating by two
+authors is in `results/shape_class_rating`.
 
-> **Status:** the manuscript is under review. Every result row in the manuscript is backed by
-> a raw output file under [`results/`](results/) and was verified against it; see
-> [`results/PAPER_TABLES.md`](results/PAPER_TABLES.md) for the number-by-number provenance.
+> **Status:** release v2.0 (Zenodo DOI 10.5281/zenodo.24208806) accompanies the benchmark paper. The
+> sections below describe the earlier shell pipeline and its reproduction.
 
 ---
 

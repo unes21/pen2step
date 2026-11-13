@@ -1,14 +1,17 @@
 cff-version: 1.2.0
-message: "If you use Pen2STEP or Pen2STEP-Bench, please cite the following."
-title: "Pen2STEP: A Deterministic Inference-Time Shell for Converting Photographed Hand-Drawn Multi-View Sketches into CadQuery Programs and STEP Solids without Additional Training"
+message: "If you use Pen2STEP-Bench or these results, please cite the following."
+title: "Evaluating an open image-to-CAD model on photographed hand sketches of construction equipment parts"
+version: "2.0.1"
 abstract: >-
-  Pen2STEP converts a photograph of a hand-drawn multi-view engineering sheet into a
-  CadQuery program and a STEP solid by wrapping a publicly released image-to-CadQuery
-  vision-language model (StoryGold/bella-v1.0-13b, a third-party LLaVA-NeXT fine-tune),
-  used without additional training, in a deterministic inference-time shell. The repository also contains Pen2STEP-Bench, a dimension-annotated benchmark
-  with 19 hand-drawn sheets and verified ground-truth solids.
-type: software
+  Pen2STEP-Bench contains 27 hand-drawn three-view sheets with verified ground-truth CadQuery models
+  and STEP solids: 19 development sheets drawn by the authors and 8 spare parts of a concrete placing
+  boom drawn by a practising engineer outside the author group. The repository holds the sheets, the
+  ground truth, the outputs of CAD-Coder run under its released protocol on the 27 sheets and on its own
+  100-sample test subset, the recorded generations and offline replay of an earlier configuration, and
+  the replay, scoring and statistics scripts behind every table of the accompanying paper.
+type: dataset
 license: MIT
+repository-code: "https://github.com/unes21/pen2step"
 authors:
   - family-names: Baytin
     given-names: Cem
@@ -27,9 +30,10 @@ authors:
     orcid: "https://orcid.org/0000-0002-4101-8560"
     affiliation: "Istanbul Technical University"
 keywords:
-  - design automation
-  - sketch-to-CAD
-  - inference-time scaffolding
-  - vision-language models
-  - program synthesis
-  - CadQuery
+  - construction equipment
+  - spare parts
+  - hand sketch
+  - vision-language model
+  - CAD generation
+  - benchmark
+  - negative result
