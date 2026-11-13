@@ -1,0 +1,238 @@
+{
+ "development, no dimensions": {
+  "n": 19,
+  "Ayberk": {
+   "stated_yes": 8,
+   "stated_parts": [
+    "real_01",
+    "real_02",
+    "real_03",
+    "real_04",
+    "real_05",
+    "real_10",
+    "real_14",
+    "real_16"
+   ],
+   "classes_equal": 8,
+   "classes_equal_parts": [
+    "real_01",
+    "real_02",
+    "real_03",
+    "real_04",
+    "real_05",
+    "real_10",
+    "real_14",
+    "real_16"
+   ]
+  },
+  "Cem": {
+   "stated_yes": 7,
+   "stated_parts": [
+    "real_01",
+    "real_03",
+    "real_04",
+    "real_05",
+    "real_10",
+    "real_14",
+    "real_16"
+   ],
+   "classes_equal": 8,
+   "classes_equal_parts": [
+    "real_01",
+    "real_02",
+    "real_03",
+    "real_04",
+    "real_05",
+    "real_10",
+    "real_14",
+    "real_16"
+   ]
+  },
+  "both_yes": [
+   "real_01",
+   "real_03",
+   "real_04",
+   "real_05",
+   "real_10",
+   "real_14",
+   "real_16"
+  ]
+ },
+ "case study, no dimensions": {
+  "n": 8,
+  "Ayberk": {
+   "stated_yes": 4,
+   "stated_parts": [
+    "cs_01",
+    "cs_02",
+    "cs_18",
+    "cs_19"
+   ],
+   "classes_equal": 4,
+   "classes_equal_parts": [
+    "cs_01",
+    "cs_02",
+    "cs_18",
+    "cs_19"
+   ]
+  },
+  "Cem": {
+   "stated_yes": 4,
+   "stated_parts": [
+    "cs_01",
+    "cs_02",
+    "cs_18",
+    "cs_19"
+   ],
+   "classes_equal": 4,
+   "classes_equal_parts": [
+    "cs_01",
+    "cs_02",
+    "cs_18",
+    "cs_19"
+   ]
+  },
+  "both_yes": [
+   "cs_01",
+   "cs_02",
+   "cs_18",
+   "cs_19"
+  ]
+ },
+ "case study, sketch dimensions": {
+  "n": 8,
+  "Ayberk": {
+   "stated_yes": 2,
+   "stated_parts": [
+    "cs_01",
+    "cs_02"
+   ],
+   "classes_equal": 2,
+   "classes_equal_parts": [
+    "cs_01",
+    "cs_02"
+   ]
+  },
+  "Cem": {
+   "stated_yes": 2,
+   "stated_parts": [
+    "cs_01",
+    "cs_02"
+   ],
+   "classes_equal": 3,
+   "classes_equal_parts": [
+    "cs_01",
+    "cs_02",
+    "cs_19"
+   ]
+  },
+  "both_yes": [
+   "cs_01",
+   "cs_02"
+  ]
+ },
+ "agreement_match": [
+  0.9714285714285714,
+  0.9397590361445783
+ ],
+ "agreement_gt_class": [
+  0.8857142857142857,
+  0.8216560509554139
+ ],
+ "agreement_pred_class": [
+  0.9428571428571428,
+  0.9253731343283582
+ ],
+ "disagree_match": [
+  [
+   "P13",
+   "real_02",
+   "development, no dimensions",
+   "yes",
+   "no"
+  ]
+ ],
+ "inconsistent_rows": {
+  "Ayberk": [],
+  "Cem": [
+   [
+    "P13",
+    "real_02",
+    "development, no dimensions"
+   ],
+   [
+    "P30",
+    "cs_19",
+    "case study, sketch dimensions"
+   ]
+  ]
+ },
+ "class_disagreements": [
+  [
+   "P04",
+   "cs_05",
+   "case study, sketch dimensions",
+   "prismatic block",
+   "flat plate",
+   "other",
+   "other"
+  ],
+  [
+   "P06",
+   "real_17",
+   "development, no dimensions",
+   "other",
+   "hollow ring or tube",
+   "flat plate",
+   "flat plate"
+  ],
+  [
+   "P20",
+   "real_15",
+   "development, no dimensions",
+   "bolt with a distinct head",
+   "hollow ring or tube",
+   "solid cylinder",
+   "solid cylinder"
+  ],
+  [
+   "P27",
+   "cs_07",
+   "case study, no dimensions",
+   "bolt with a distinct head",
+   "bolt with a distinct head",
+   "other",
+   "prismatic block"
+  ],
+  [
+   "P30",
+   "cs_19",
+   "case study, sketch dimensions",
+   "prismatic block",
+   "prismatic block",
+   "flat plate",
+   "prismatic block"
+  ],
+  [
+   "P35",
+   "real_08",
+   "development, no dimensions",
+   "other",
+   "prismatic block",
+   "flat plate",
+   "flat plate"
+  ]
+ ],
+ "discussed_during_rating": [
+  [
+   "P03",
+   "real_13",
+   "development, no dimensions"
+  ],
+  [
+   "P04",
+   "cs_05",
+   "case study, sketch dimensions"
+  ]
+ ]
+}
