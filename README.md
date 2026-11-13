@@ -16,7 +16,7 @@ below, because the paper reports how those settings produced a misleading baseli
 (`results/replay`, `results/replay_case`, `results/token_control`). The blind shape-class rating by two
 authors is in `results/shape_class_rating`.
 
-> **Status:** release v2.0 (Zenodo DOI 10.5281/zenodo.24208806) accompanies the benchmark paper. The
+> **Status:** releases from v2.0 on accompany the benchmark paper (Zenodo, all versions: 10.5281/zenodo.22670847). The
 > sections below describe the earlier shell pipeline and its reproduction.
 
 ---
